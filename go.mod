@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/jaypipes/ghw v0.9.0
-	github.com/jkstack/anet v0.0.0-20220825072141-2dac5daf572c
+	github.com/jkstack/anet v0.0.0-20220825083909-1ee75022d55f
 	github.com/jkstack/jkframe v1.0.7
 	github.com/jkstack/libagent v1.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
