@@ -23,6 +23,12 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 		rep.TaskID = msg.TaskID
 		rep.HMStatic = getStatic()
 		agent.chWrite <- &rep
+	case anet.TypeHMDynamicReq:
+		var rep anet.Msg
+		rep.Type = anet.TypeHMDynamicRep
+		rep.TaskID = msg.TaskID
+		rep.HMDynamicRep = getDynamic(msg.HMDynamicReq)
+		agent.chWrite <- &rep
 	}
 	return nil
 }
