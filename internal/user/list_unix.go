@@ -1,5 +1,5 @@
-//go:build unix || linux
-// +build unix linux
+//go:build !windows
+// +build !windows
 
 package user
 
