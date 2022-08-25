@@ -1,4 +1,4 @@
-package core
+package internal
 
 import (
 	"context"
@@ -16,6 +16,14 @@ func (agent *Agent) OnReportMonitor() {
 }
 
 func (agent *Agent) OnMessage(msg *anet.Msg) error {
+	switch msg.Type {
+	case anet.TypeHMStaticReq:
+		var rep anet.Msg
+		rep.Type = anet.TypeHMStaticRep
+		rep.TaskID = msg.TaskID
+		rep.HMStatic = getStatic()
+		agent.chWrite <- &rep
+	}
 	return nil
 }
 

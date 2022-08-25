@@ -1,7 +1,7 @@
-package core
+package internal
 
 import (
-	"metrics/core/conf"
+	"metrics/internal/conf"
 
 	"github.com/jkstack/anet"
 )

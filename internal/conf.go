@@ -1,7 +1,7 @@
-package core
+package internal
 
 import (
-	lconf "metrics/core/conf"
+	lconf "metrics/internal/conf"
 	"os"
 
 	"github.com/jkstack/jkframe/conf/kvconf"

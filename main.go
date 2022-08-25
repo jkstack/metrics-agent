@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"metrics/core"
+	"metrics/internal"
 	"os"
 	rt "runtime"
 
@@ -42,7 +42,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	app := core.New(*cf, version)
+	app := internal.New(*cf, version)
 
 	switch *act {
 	case "install":

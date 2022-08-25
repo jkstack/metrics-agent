@@ -3,9 +3,10 @@ module metrics
 go 1.19
 
 require (
-	github.com/jkstack/anet v0.0.0-20220805084406-b2b99e224f87
+	github.com/jkstack/anet v0.0.0-20220825040413-818bc7f209d5
 	github.com/jkstack/jkframe v1.0.7
 	github.com/jkstack/libagent v1.0.1
+	github.com/shirou/gopsutil/v3 v3.22.7
 )
 
 require (
@@ -24,7 +25,6 @@ require (
 	github.com/opencontainers/runtime-spec v1.0.2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20220216144756-c35f1ee13d7c // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
-	github.com/shirou/gopsutil/v3 v3.22.7 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/tklauser/numcpus v0.5.0 // indirect
