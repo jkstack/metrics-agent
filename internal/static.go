@@ -61,7 +61,6 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 		logging.Warning("get cpu.info: %v", err)
 		return
 	}
-	sockets := 0
 	for _, core := range cores {
 		id, _ := strconv.ParseUint(core.CoreID, 10, 32)
 		physical, _ := strconv.ParseUint(core.PhysicalID, 10, 32)
@@ -73,11 +72,7 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 			Physical:  int32(physical),
 			Mhz:       core.Mhz,
 		})
-		if physical > uint64(sockets) {
-			sockets = int(physical)
-		}
 	}
-	ret.CPU.Socket = sockets + 1
 }
 
 func fillStaticMemoryInfo(ret *anet.HMStaticPayload) {
