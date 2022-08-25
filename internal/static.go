@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"metrics/internal/user"
 	"net"
 	"runtime"
 	"strconv"
@@ -24,6 +25,7 @@ func getStatic() *anet.HMStaticPayload {
 	fillStaticMemoryInfo(&ret)
 	fillStaticDiskInfo(&ret)
 	fillStaticNetworkInfo(&ret)
+	fillStaticUserInfo(&ret)
 	return &ret
 }
 
@@ -39,6 +41,7 @@ func fillStaticHostInfo(ret *anet.HMStaticPayload) {
 	ret.OS.PlatformName = info.Platform
 	ret.OS.PlatformVersion = info.PlatformVersion
 	ret.OS.Install = time.Unix(0, 0) // TODO
+	ret.OS.Startup = time.Now().Add(-ret.Host.UpTime)
 	ret.Kernel.Version = info.KernelVersion
 	ret.Kernel.Arch = info.KernelArch
 }
@@ -58,6 +61,7 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 		logging.Warning("get cpu.info: %v", err)
 		return
 	}
+	sockets := 0
 	for _, core := range cores {
 		id, _ := strconv.ParseUint(core.CoreID, 10, 32)
 		physical, _ := strconv.ParseUint(core.PhysicalID, 10, 32)
@@ -69,7 +73,11 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 			Physical:  int32(physical),
 			Mhz:       core.Mhz,
 		})
+		if physical > uint64(sockets) {
+			sockets = int(physical)
+		}
 	}
+	ret.CPU.Socket = sockets + 1
 }
 
 func fillStaticMemoryInfo(ret *anet.HMStaticPayload) {
@@ -95,7 +103,9 @@ func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
 		logging.Warning("get blocks: %v", err)
 	}
 	for _, disk := range block.Disks {
-		if disk.StorageController == ghw.STORAGE_CONTROLLER_UNKNOWN {
+		switch disk.DriveType {
+		case ghw.DRIVE_TYPE_HDD, ghw.DRIVE_TYPE_SSD:
+		default:
 			continue
 		}
 		var parts []string
@@ -152,6 +162,20 @@ func fillStaticNetworkInfo(ret *anet.HMStaticPayload) {
 			Flags:   strings.Split(intf.Flags.String(), "|"),
 			Mac:     intf.HardwareAddr.String(),
 			Address: ips,
+		})
+	}
+}
+
+func fillStaticUserInfo(ret *anet.HMStaticPayload) {
+	users, err := user.List()
+	if err != nil {
+		logging.Warning("get user list: %v", err)
+	}
+	for _, user := range users {
+		ret.User = append(ret.User, anet.HMUser{
+			Name: user.Name,
+			ID:   user.ID,
+			GID:  user.GID,
 		})
 	}
 }

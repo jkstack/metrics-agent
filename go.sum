@@ -168,6 +168,8 @@ github.com/jkstack/anet v0.0.0-20220825061658-d6931611bb2f h1:3el0a6E85t3ojM6p8L
 github.com/jkstack/anet v0.0.0-20220825061658-d6931611bb2f/go.mod h1:96cesKVzD7XphMYim6bupr/74vds/p/07iBbZC/oEdw=
 github.com/jkstack/anet v0.0.0-20220825062421-406a2f330850 h1:3S67dVIYmiDqnMn7/nY5JOL8YVKcjQ9LHnLp1jDZgmg=
 github.com/jkstack/anet v0.0.0-20220825062421-406a2f330850/go.mod h1:96cesKVzD7XphMYim6bupr/74vds/p/07iBbZC/oEdw=
+github.com/jkstack/anet v0.0.0-20220825072141-2dac5daf572c h1:3gHhcpw6jBwsw72v8cOM0DL+Tu7Kgy/fdF/wOku89To=
+github.com/jkstack/anet v0.0.0-20220825072141-2dac5daf572c/go.mod h1:96cesKVzD7XphMYim6bupr/74vds/p/07iBbZC/oEdw=
 github.com/jkstack/jkframe v1.0.7 h1:e5VWFa6VRkFvxKuNNnkT8FYq02eFAPxg2qWxLcdkY08=
 github.com/jkstack/jkframe v1.0.7/go.mod h1:Nvs/TgkQD3OA324+ljCzBlfhd1tvCxhESBXywRB9l/c=
 github.com/jkstack/libagent v1.0.1 h1:SEbPAgmyTpsOcaXuRlKyUQCz5ZXV/vqhGL+AzCFHemg=
