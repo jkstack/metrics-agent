@@ -13,7 +13,6 @@ type task struct {
 	Net     net        `kv:"net"`
 	Process process    `kv:"process"`
 	Conns   conns      `kv:"conns"`
-	Shell   shell      `kv:"shell"`
 }
 
 // Configure configure
@@ -53,8 +52,6 @@ func (task *task) Parse() {
 			task.Net.enabled = true
 		case "conns":
 			task.Conns.enabled = true
-		case "shell":
-			task.Shell.enabled = true
 		}
 	}
 }
