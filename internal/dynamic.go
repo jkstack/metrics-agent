@@ -4,7 +4,9 @@ import (
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
 	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/net"
 )
 
 func getDynamic(req *anet.HMDynamicReq) *anet.HMDynamicRep {
@@ -42,9 +44,43 @@ func getUsage() *anet.HMDynamicUsage {
 		ret.Memory.Total = memStat.Total
 		ret.Memory.Usage = memStat.UsedPercent
 		ret.Memory.SwapUsed = memStat.SwapCached
+		ret.Memory.SwapFree = memStat.SwapFree
+		ret.Memory.SwapTotal = memStat.Total
 	}
-	logging.Info("usage: %v", ret)
-	return nil
+	parts, err := disk.Partitions(false)
+	if err != nil {
+		logging.Warning("get partitions: %v", err)
+	}
+	for _, part := range parts {
+		usage, err := disk.Usage(part.Mountpoint)
+		if err != nil {
+			logging.Warning("get partition usage(%s): %v", part.Mountpoint, err)
+			continue
+		}
+		ret.Partitions = append(ret.Partitions, anet.HMDynamicPartition{
+			Name:       part.Mountpoint,
+			Used:       usage.Used,
+			Free:       usage.Free,
+			Usage:      usage.UsedPercent,
+			InodeUsed:  usage.InodesUsed,
+			InodeFree:  usage.InodesFree,
+			InodeUsage: usage.InodesUsedPercent,
+		})
+	}
+	stats, err := net.IOCounters(true)
+	if err != nil {
+		logging.Warning("get interface stat: %v", err)
+	}
+	for _, stat := range stats {
+		ret.Interface = append(ret.Interface, anet.HMDynamicInterface{
+			Name:        stat.Name,
+			BytesSent:   stat.BytesSent,
+			BytesRecv:   stat.BytesRecv,
+			PacketsSent: stat.PacketsSent,
+			PacketsRecv: stat.PacketsRecv,
+		})
+	}
+	return &ret
 }
 
 func getProcessList() []anet.HMDynamicProcess {
