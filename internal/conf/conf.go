@@ -7,12 +7,11 @@ import (
 )
 
 type task struct {
-	Jobs    stringList `kv:"jobs"`
-	Static  static     `kv:"static"`
-	Usage   usage      `kv:"usage"`
-	Net     net        `kv:"net"`
-	Process process    `kv:"process"`
-	Conns   conns      `kv:"conns"`
+	Jobs    stringList       `kv:"jobs"`
+	Static  static           `kv:"static"`
+	Usage   usage            `kv:"usage"`
+	Process ProcessConfigure `kv:"process"`
+	Conns   conns            `kv:"conns"`
 }
 
 // Configure configure
@@ -48,8 +47,6 @@ func (task *task) Parse() {
 			task.Usage.enabled = true
 		case "process":
 			task.Process.enabled = true
-		case "net":
-			task.Net.enabled = true
 		case "conns":
 			task.Conns.enabled = true
 		}

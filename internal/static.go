@@ -11,6 +11,7 @@ import (
 	"github.com/jaypipes/ghw"
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
+	"github.com/jkstack/jkframe/utils"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
@@ -70,7 +71,7 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 			Core:      int32(id),
 			Cores:     core.Cores,
 			Physical:  int32(physical),
-			Mhz:       core.Mhz,
+			Mhz:       utils.Float64P2(core.Mhz),
 		})
 	}
 }

@@ -2,8 +2,8 @@ package conf
 
 import "github.com/jkstack/jkframe/utils"
 
-type process struct {
+type ProcessConfigure struct {
 	enabled  bool           `kv:"-"`
+	Limit    int            `kv:"qps_limit"`
 	Interval utils.Duration `kv:"interval"`
-	Top      uint64         `kv:"top"`
 }

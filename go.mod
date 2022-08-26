@@ -4,11 +4,12 @@ go 1.19
 
 require (
 	github.com/jaypipes/ghw v0.9.0
-	github.com/jkstack/anet v0.0.0-20220826022354-8dadf507d1cd
-	github.com/jkstack/jkframe v1.0.7
+	github.com/jkstack/anet v0.0.0-20220826041714-fbfef034c5a5
+	github.com/jkstack/jkframe v1.0.8
 	github.com/jkstack/libagent v1.0.3
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.7
+	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 )
 
 require (

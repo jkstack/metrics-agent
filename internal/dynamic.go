@@ -1,22 +1,28 @@
 package internal
 
 import (
+	"context"
+	"metrics/internal/conf"
+
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
+	"github.com/jkstack/jkframe/utils"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/net"
+	"github.com/shirou/gopsutil/v3/process"
+	"golang.org/x/time/rate"
 )
 
-func getDynamic(req *anet.HMDynamicReq) *anet.HMDynamicRep {
+func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure) *anet.HMDynamicRep {
 	var ret anet.HMDynamicRep
 	for _, req := range req.Req {
 		switch req {
 		case anet.HMReqUsage:
 			ret.Usage = getUsage()
 		case anet.HMReqProcess:
-			ret.Process = getProcessList()
+			ret.Process = getProcessList(cfg.Task.Process)
 		case anet.HMReqConnections:
 			ret.Connections = getConnectionList()
 		}
@@ -31,7 +37,7 @@ func getUsage() *anet.HMDynamicUsage {
 		logging.Warning("get cpu percent: %v", err)
 	}
 	if len(usage) > 0 {
-		ret.Cpu.Usage = usage[0]
+		ret.Cpu.Usage = utils.Float64P2(usage[0])
 	}
 	memStat, err := mem.VirtualMemory()
 	if err != nil {
@@ -42,7 +48,7 @@ func getUsage() *anet.HMDynamicUsage {
 		ret.Memory.Free = memStat.Free
 		ret.Memory.Available = memStat.Available
 		ret.Memory.Total = memStat.Total
-		ret.Memory.Usage = memStat.UsedPercent
+		ret.Memory.Usage = utils.Float64P2(memStat.UsedPercent)
 		ret.Memory.SwapUsed = memStat.SwapCached
 		ret.Memory.SwapFree = memStat.SwapFree
 		ret.Memory.SwapTotal = memStat.Total
@@ -61,10 +67,10 @@ func getUsage() *anet.HMDynamicUsage {
 			Name:       part.Mountpoint,
 			Used:       usage.Used,
 			Free:       usage.Free,
-			Usage:      usage.UsedPercent,
+			Usage:      utils.Float64P2(usage.UsedPercent),
 			InodeUsed:  usage.InodesUsed,
 			InodeFree:  usage.InodesFree,
-			InodeUsage: usage.InodesUsedPercent,
+			InodeUsage: utils.Float64P2(usage.InodesUsedPercent),
 		})
 	}
 	stats, err := net.IOCounters(true)
@@ -83,8 +89,64 @@ func getUsage() *anet.HMDynamicUsage {
 	return &ret
 }
 
-func getProcessList() []anet.HMDynamicProcess {
-	return nil
+func getProcessList(cfg conf.ProcessConfigure) []anet.HMDynamicProcess {
+	pids, err := process.Pids()
+	if err != nil {
+		logging.Warning("get process list: %v", err)
+	}
+	limit := rate.NewLimiter(rate.Inf, 1)
+	if cfg.Limit > 0 {
+		limit = rate.NewLimiter(rate.Limit(cfg.Limit), 1)
+	}
+	var ret []anet.HMDynamicProcess
+	for _, pid := range pids {
+		limit.Wait(context.Background())
+		p := process.Process{Pid: pid}
+		var dy anet.HMDynamicProcess
+		dy.ParentID, err = p.Ppid()
+		if err != nil {
+			logging.Warning("process => get parent id(%d): %v", pid, err)
+		}
+		dy.User, err = p.Username()
+		if err != nil {
+			logging.Warning("process => get username(%d): %v", pid, err)
+		}
+		usage, err := p.CPUPercent()
+		if err != nil {
+			logging.Warning("process => get cpu_usage(%d): %v", pid, err)
+		}
+		dy.CpuUsage = utils.Float64P2(usage)
+		memInfo, err := p.MemoryInfo()
+		if err != nil {
+			logging.Warning("process => get memory_info(%d): %v", pid, err)
+		}
+		if memInfo != nil {
+			dy.RssMemory = memInfo.RSS
+			dy.VirtualMemory = memInfo.VMS
+			dy.SwapMemory = memInfo.Swap
+		}
+		percent, err := p.MemoryPercent()
+		if err != nil {
+			logging.Warning("process => get memory_usage(%d): %v", pid, err)
+		}
+		dy.MemoryUsage = utils.Float64P2(percent)
+		dy.Cmd, err = p.CmdlineSlice()
+		if err != nil {
+			logging.Warning("process => get cmd(%d): %v", pid, err)
+		}
+		conns, err := p.Connections()
+		if err != nil {
+			logging.Warning("process => get connections(%d): %v", pid, err)
+		}
+		for _, conn := range conns {
+			if conn.Status == "LISTEN" {
+				dy.Listen = append(dy.Listen, conn.Laddr.Port)
+			}
+		}
+		dy.Connections = len(conns)
+		ret = append(ret, dy)
+	}
+	return ret
 }
 
 func getConnectionList() []anet.HMDynamicConnection {

@@ -27,7 +27,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 		var rep anet.Msg
 		rep.Type = anet.TypeHMDynamicRep
 		rep.TaskID = msg.TaskID
-		rep.HMDynamicRep = getDynamic(msg.HMDynamicReq)
+		rep.HMDynamicRep = getDynamic(msg.HMDynamicReq, agent.cfg)
 		agent.chWrite <- &rep
 	}
 	return nil
