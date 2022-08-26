@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"metrics/internal/conf"
+	"runtime"
 	"sort"
 
 	"github.com/jkstack/anet"
@@ -194,13 +195,11 @@ func getConnectionList(cfg conf.ConnsConfigure, allow []string) []anet.HMDynamic
 	} else if len(cfg.Allow) > 0 {
 		parseAllow(cfg.Allow)
 	} else {
-		allows["all"] = true
-	}
-	if allows["tcp"] && allows["udp"] && allows["unix"] {
-		allows["all"] = true
-		delete(allows, "tcp")
-		delete(allows, "udp")
-		delete(allows, "unix")
+		allows["tcp"] = true
+		allows["udp"] = true
+		if runtime.GOOS != "windows" {
+			allows["unix"] = true
+		}
 	}
 	pids, err := process.Pids()
 	if err != nil {
