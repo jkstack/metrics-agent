@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"metrics/internal/conf"
+	"sort"
 
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
@@ -16,13 +17,14 @@ import (
 )
 
 func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure) *anet.HMDynamicRep {
+	top := req.Top
 	var ret anet.HMDynamicRep
 	for _, req := range req.Req {
 		switch req {
 		case anet.HMReqUsage:
 			ret.Usage = getUsage()
 		case anet.HMReqProcess:
-			ret.Process = getProcessList(cfg.Task.Process)
+			ret.Process = getProcessList(cfg.Task.Process, top)
 		case anet.HMReqConnections:
 			ret.Connections = getConnectionList()
 		}
@@ -89,7 +91,7 @@ func getUsage() *anet.HMDynamicUsage {
 	return &ret
 }
 
-func getProcessList(cfg conf.ProcessConfigure) []anet.HMDynamicProcess {
+func getProcessList(cfg conf.ProcessConfigure, top int) []anet.HMDynamicProcess {
 	pids, err := process.Pids()
 	if err != nil {
 		logging.Warning("get process list: %v", err)
@@ -103,22 +105,34 @@ func getProcessList(cfg conf.ProcessConfigure) []anet.HMDynamicProcess {
 		limit.Wait(context.Background())
 		p := process.Process{Pid: pid}
 		var dy anet.HMDynamicProcess
-		dy.ParentID, err = p.Ppid()
-		if err != nil {
-			logging.Warning("process => get parent id(%d): %v", pid, err)
-		}
-		dy.User, err = p.Username()
-		if err != nil {
-			logging.Warning("process => get username(%d): %v", pid, err)
-		}
+		dy.ID = pid
 		usage, err := p.CPUPercent()
 		if err != nil {
 			logging.Warning("process => get cpu_usage(%d): %v", pid, err)
 		}
 		dy.CpuUsage = utils.Float64P2(usage)
+		ret = append(ret, dy)
+	}
+	if top > 0 && len(ret) > top {
+		sort.Slice(ret, func(i, j int) bool {
+			return ret[i].CpuUsage > ret[j].CpuUsage
+		})
+		ret = ret[:top]
+	}
+	for i, dy := range ret {
+		limit.Wait(context.Background())
+		p := process.Process{Pid: dy.ID}
+		dy.ParentID, err = p.Ppid()
+		if err != nil {
+			logging.Warning("process => get parent id(%d): %v", dy.ID, err)
+		}
+		dy.User, err = p.Username()
+		if err != nil {
+			logging.Warning("process => get username(%d): %v", dy.ID, err)
+		}
 		memInfo, err := p.MemoryInfo()
 		if err != nil {
-			logging.Warning("process => get memory_info(%d): %v", pid, err)
+			logging.Warning("process => get memory_info(%d): %v", dy.ID, err)
 		}
 		if memInfo != nil {
 			dy.RssMemory = memInfo.RSS
@@ -127,16 +141,16 @@ func getProcessList(cfg conf.ProcessConfigure) []anet.HMDynamicProcess {
 		}
 		percent, err := p.MemoryPercent()
 		if err != nil {
-			logging.Warning("process => get memory_usage(%d): %v", pid, err)
+			logging.Warning("process => get memory_usage(%d): %v", dy.ID, err)
 		}
 		dy.MemoryUsage = utils.Float64P2(percent)
 		dy.Cmd, err = p.CmdlineSlice()
 		if err != nil {
-			logging.Warning("process => get cmd(%d): %v", pid, err)
+			logging.Warning("process => get cmd(%d): %v", dy.ID, err)
 		}
 		conns, err := p.Connections()
 		if err != nil {
-			logging.Warning("process => get connections(%d): %v", pid, err)
+			logging.Warning("process => get connections(%d): %v", dy.ID, err)
 		}
 		for _, conn := range conns {
 			if conn.Status == "LISTEN" {
@@ -144,7 +158,7 @@ func getProcessList(cfg conf.ProcessConfigure) []anet.HMDynamicProcess {
 			}
 		}
 		dy.Connections = len(conns)
-		ret = append(ret, dy)
+		ret[i] = dy
 	}
 	return ret
 }
