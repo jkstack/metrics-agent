@@ -11,7 +11,7 @@ type task struct {
 	Static  static           `kv:"static"`
 	Usage   usage            `kv:"usage"`
 	Process ProcessConfigure `kv:"process"`
-	Conns   conns            `kv:"conns"`
+	Conns   ConnsConfigure   `kv:"conns"`
 }
 
 // Configure configure

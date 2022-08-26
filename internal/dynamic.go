@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"fmt"
 	"metrics/internal/conf"
 	"sort"
 
@@ -18,6 +19,7 @@ import (
 
 func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure) *anet.HMDynamicRep {
 	top := req.Top
+	allowConns := req.AllowConns
 	var ret anet.HMDynamicRep
 	for _, req := range req.Req {
 		switch req {
@@ -26,7 +28,7 @@ func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure) *anet.HMDynamicRep 
 		case anet.HMReqProcess:
 			ret.Process = getProcessList(cfg.Task.Process, top)
 		case anet.HMReqConnections:
-			ret.Connections = getConnectionList()
+			ret.Connections = getConnectionList(cfg.Task.Conns, allowConns)
 		}
 	}
 	return &ret
@@ -163,6 +165,71 @@ func getProcessList(cfg conf.ProcessConfigure, top int) []anet.HMDynamicProcess 
 	return ret
 }
 
-func getConnectionList() []anet.HMDynamicConnection {
-	return nil
+func getConnectionList(cfg conf.ConnsConfigure, allow []string) []anet.HMDynamicConnection {
+	allows := make(map[string]bool)
+	parseAllow := func(allow []string) {
+		for _, allow := range allow {
+			allows[allow] = true
+		}
+		if allows["tcp4"] && allows["tcp6"] {
+			allows["tcp"] = true
+			delete(allows, "tcp4")
+			delete(allows, "tcp6")
+		}
+		if allows["udp4"] && allows["udp6"] {
+			allows["udp"] = true
+			delete(allows, "udp4")
+			delete(allows, "udp6")
+		}
+	}
+	if len(allow) > 0 {
+		parseAllow(allow)
+	} else if len(cfg.Allow) > 0 {
+		parseAllow(cfg.Allow)
+	} else {
+		allows["all"] = true
+	}
+	if allows["tcp"] && allows["udp"] && allows["unix"] {
+		allows["all"] = true
+		delete(allows, "tcp")
+		delete(allows, "udp")
+		delete(allows, "unix")
+	}
+	pids, err := process.Pids()
+	if err != nil {
+		logging.Warning("get process list in connection.list: %v", err)
+		return nil
+	}
+	limit := rate.NewLimiter(rate.Inf, 1)
+	if cfg.Limit > 0 {
+		limit = rate.NewLimiter(rate.Limit(cfg.Limit), 1)
+	}
+	addr := func(addr net.Addr) string {
+		if addr.Port > 0 {
+			return fmt.Sprintf("%s:%d", addr.IP, addr.Port)
+		}
+		return addr.IP
+	}
+	var ret []anet.HMDynamicConnection
+	for _, pid := range pids {
+		for kind := range allows {
+			conns, err := net.ConnectionsPidWithoutUids(kind, pid)
+			if err != nil {
+				logging.Warning("get connections of kind %s: %v", kind, err)
+				continue
+			}
+			for _, conn := range conns {
+				limit.Wait(context.Background())
+				ret = append(ret, anet.HMDynamicConnection{
+					Fd:     conn.Fd,
+					Pid:    pid,
+					Type:   connType(conn),
+					Local:  addr(conn.Laddr),
+					Remote: addr(conn.Raddr),
+					Status: conn.Status,
+				})
+			}
+		}
+	}
+	return ret
 }

@@ -158,14 +158,8 @@ github.com/jaypipes/ghw v0.9.0/go.mod h1:dXMo19735vXOjpIBDyDYSp31sB2u4hrtRCMxInq
 github.com/jaypipes/pcidb v1.0.0 h1:vtZIfkiCUE42oYbJS0TAq9XSfSmcsgo9IdxSm9qzYU8=
 github.com/jaypipes/pcidb v1.0.0/go.mod h1:TnYUvqhPBzCKnH34KrIX22kAeEbDCSRJ9cqLRCuNDfk=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
-github.com/jkstack/anet v0.0.0-20220826022354-8dadf507d1cd h1:q8rg0Bo8DG4UKmhUfwsXJ3NmS+E9q1H8mKBDp5WtRWc=
-github.com/jkstack/anet v0.0.0-20220826022354-8dadf507d1cd/go.mod h1:96cesKVzD7XphMYim6bupr/74vds/p/07iBbZC/oEdw=
-github.com/jkstack/anet v0.0.0-20220826041714-fbfef034c5a5 h1:1ZjiM2FPpL/+6rrCqOqRN3KoQNnQ/sdyF9IHBa5dvgk=
-github.com/jkstack/anet v0.0.0-20220826041714-fbfef034c5a5/go.mod h1:L9J4lHwDxTsCPX5MNaVa/0UG36JIiDWIJxlp3jmCQxQ=
-github.com/jkstack/anet v0.0.0-20220826054900-51088f1e010c h1:mr7C0KVE6V1anA2qnb/Yy2i9o+Pq8r5ngqUje9R4lpQ=
-github.com/jkstack/anet v0.0.0-20220826054900-51088f1e010c/go.mod h1:L9J4lHwDxTsCPX5MNaVa/0UG36JIiDWIJxlp3jmCQxQ=
-github.com/jkstack/jkframe v1.0.7 h1:e5VWFa6VRkFvxKuNNnkT8FYq02eFAPxg2qWxLcdkY08=
-github.com/jkstack/jkframe v1.0.7/go.mod h1:Nvs/TgkQD3OA324+ljCzBlfhd1tvCxhESBXywRB9l/c=
+github.com/jkstack/anet v0.0.0-20220826064009-66893b8e7d01 h1:lQOF+8jvwxEyzB4YKp/YCxoFGvxbnbvU6QGmxgfEt+g=
+github.com/jkstack/anet v0.0.0-20220826064009-66893b8e7d01/go.mod h1:L9J4lHwDxTsCPX5MNaVa/0UG36JIiDWIJxlp3jmCQxQ=
 github.com/jkstack/jkframe v1.0.8 h1:+hrdYFs7OnwJB3QiYoqfsH3laXYKR/gI56Xc5k88zDs=
 github.com/jkstack/jkframe v1.0.8/go.mod h1:Nvs/TgkQD3OA324+ljCzBlfhd1tvCxhESBXywRB9l/c=
 github.com/jkstack/libagent v1.0.3 h1:ZbzTeRWI9Dc8i7Oln/Z1/gasumlBhQ0N1zBJhsqDmuU=
