@@ -1,5 +1,5 @@
-//go:build !windows
-// +build !windows
+//go:build !linux
+// +build !linux
 
 package internal
 
@@ -17,8 +17,6 @@ func connType(conn net.ConnectionStat) string {
 			return "tcp4"
 		} else if conn.Family == syscall.AF_INET6 {
 			return "tcp6"
-		} else if conn.Family == syscall.AF_FILE {
-			return "file"
 		}
 	case syscall.SOCK_DGRAM:
 		if conn.Family == syscall.AF_INET {
