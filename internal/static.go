@@ -134,6 +134,7 @@ func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
 		}
 		if usage != nil {
 			info.Total = usage.Total
+			info.INodes = usage.InodesTotal
 		}
 		ret.Partitions = append(ret.Partitions, info)
 	}
