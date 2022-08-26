@@ -197,14 +197,13 @@ func getConnectionList(cfg conf.ConnsConfigure, allow []string) []anet.HMDynamic
 	} else {
 		allows["tcp"] = true
 		allows["udp"] = true
-		if runtime.GOOS != "windows" {
-			allows["unix"] = true
-		}
+		allows["unix"] = true
 	}
-	pids, err := process.Pids()
-	if err != nil {
-		logging.Warning("get process list in connection.list: %v", err)
-		return nil
+	if allows["tcp"] && allows["udp"] && allows["unix"] {
+		allows["all"] = true
+		delete(allows, "tcp")
+		delete(allows, "udp")
+		delete(allows, "unix")
 	}
 	limit := rate.NewLimiter(rate.Inf, 1)
 	if cfg.Limit > 0 {
@@ -217,24 +216,28 @@ func getConnectionList(cfg conf.ConnsConfigure, allow []string) []anet.HMDynamic
 		return addr.IP
 	}
 	var ret []anet.HMDynamicConnection
-	for _, pid := range pids {
-		for kind := range allows {
-			conns, err := net.ConnectionsPidWithoutUids(kind, pid)
-			if err != nil {
-				logging.Warning("get connections of kind %s: %v", kind, err)
-				continue
-			}
-			for _, conn := range conns {
-				limit.Wait(context.Background())
-				ret = append(ret, anet.HMDynamicConnection{
-					Fd:     conn.Fd,
-					Pid:    pid,
-					Type:   connType(conn),
-					Local:  addr(conn.Laddr),
-					Remote: addr(conn.Raddr),
-					Status: conn.Status,
-				})
-			}
+	for kind := range allows {
+		var conns []net.ConnectionStat
+		var err error
+		if runtime.GOOS == "windows" {
+			conns, err = net.Connections(kind)
+		} else {
+			conns, err = net.ConnectionsWithoutUids(kind)
+		}
+		if err != nil {
+			logging.Warning("get connections of kind %s: %v", kind, err)
+			continue
+		}
+		for _, conn := range conns {
+			limit.Wait(context.Background())
+			ret = append(ret, anet.HMDynamicConnection{
+				Fd:     conn.Fd,
+				Pid:    conn.Pid,
+				Type:   connType(conn),
+				Local:  addr(conn.Laddr),
+				Remote: addr(conn.Raddr),
+				Status: conn.Status,
+			})
 		}
 	}
 	return ret
