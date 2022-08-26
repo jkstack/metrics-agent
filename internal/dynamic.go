@@ -169,7 +169,14 @@ func getConnectionList(cfg conf.ConnsConfigure, allow []string) []anet.HMDynamic
 	allows := make(map[string]bool)
 	parseAllow := func(allow []string) {
 		for _, allow := range allow {
-			allows[allow] = true
+			switch allow {
+			case "tcp", "tcp4", "tcp6":
+				allows[allow] = true
+			case "udp", "udp4", "udp6":
+				allows[allow] = true
+			case "unix":
+				allows[allow] = true
+			}
 		}
 		if allows["tcp4"] && allows["tcp6"] {
 			allows["tcp"] = true
