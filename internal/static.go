@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jackpal/gateway"
 	"github.com/jaypipes/ghw"
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
@@ -141,7 +142,11 @@ func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
 }
 
 func fillStaticNetworkInfo(ret *anet.HMStaticPayload) {
-	ret.GateWay = "TODO"
+	gw, err := gateway.DiscoverGateway()
+	if err != nil {
+		logging.Warning("get gateway: %v", err)
+	}
+	ret.GateWay = gw.String()
 	intfs, err := net.Interfaces()
 	if err != nil {
 		logging.Warning("get interfaces: %v", err)

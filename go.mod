@@ -3,13 +3,14 @@ module metrics
 go 1.19
 
 require (
+	github.com/jackpal/gateway v1.0.7
 	github.com/jaypipes/ghw v0.9.0
 	github.com/jkstack/anet v0.0.0-20220826064009-66893b8e7d01
 	github.com/jkstack/jkframe v1.0.8
 	github.com/jkstack/libagent v1.0.3
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.7
-	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
+	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9
 )
 
 require (
@@ -36,7 +37,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/tklauser/numcpus v0.5.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/sys v0.0.0-20220804214406-8e32c043e418 // indirect
+	golang.org/x/sys v0.0.0-20220825204002-c680a09ffe64 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	howett.net/plist v1.0.0 // indirect
