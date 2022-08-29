@@ -42,7 +42,11 @@ func fillStaticHostInfo(ret *anet.HMStaticPayload) {
 	ret.OS.Name = info.OS
 	ret.OS.PlatformName = info.Platform
 	ret.OS.PlatformVersion = info.PlatformVersion
-	ret.OS.Install = time.Unix(0, 0) // TODO
+	it, err := getInstallTime()
+	if err != nil {
+		logging.Warning("get install time: %v", err)
+	}
+	ret.OS.Install = it
 	ret.OS.Startup = time.Now().Add(-ret.Host.UpTime)
 	ret.Kernel.Version = info.KernelVersion
 	ret.Kernel.Arch = info.KernelArch
