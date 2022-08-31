@@ -3,6 +3,7 @@ package internal
 import (
 	lconf "metrics/internal/conf"
 	"os"
+	"time"
 
 	"github.com/jkstack/jkframe/conf/kvconf"
 	"github.com/jkstack/jkframe/logging"
@@ -34,6 +35,18 @@ func load(dir string) *lconf.Configure {
 			ret.Task.Conns.Enabled = true
 		}
 	}
+	if ret.Task.Static.Interval == 0 {
+		ret.Task.Static.Interval = utils.Duration(24 * time.Hour)
+	}
+	if ret.Task.Usage.Interval == 0 {
+		ret.Task.Usage.Interval = utils.Duration(5 * time.Second)
+	}
+	if ret.Task.Process.Interval == 0 {
+		ret.Task.Process.Interval = utils.Duration(time.Minute)
+	}
+	if ret.Task.Conns.Interval == 0 {
+		ret.Task.Conns.Interval = utils.Duration(time.Minute)
+	}
 	logging.Info("jobs: %v", ret.Task.Jobs)
 	return &ret
 }
@@ -53,6 +66,20 @@ func (agent *Agent) OnRewriteConfigure() error {
 	}
 	defer f.Close()
 	defer os.Remove(f.Name())
+	var jobs []string
+	if agent.cfg.Task.Static.Enabled {
+		jobs = append(jobs, "static")
+	}
+	if agent.cfg.Task.Usage.Enabled {
+		jobs = append(jobs, "usage")
+	}
+	if agent.cfg.Task.Process.Enabled {
+		jobs = append(jobs, "process")
+	}
+	if agent.cfg.Task.Conns.Enabled {
+		jobs = append(jobs, "conns")
+	}
+	agent.cfg.Task.Jobs = jobs
 	err = kvconf.NewEncoder(f).Encode(agent.cfg)
 	if err != nil {
 		return err
