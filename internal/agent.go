@@ -38,7 +38,9 @@ func (agent *Agent) Version() string {
 }
 
 func (agent *Agent) run() {
-	agent.cancel()
+	if agent.cancel != nil {
+		agent.cancel()
+	}
 	agent.ctx, agent.cancel = context.WithCancel(context.Background())
 	run := func(interval time.Duration, cb func() *anet.Msg) {
 		for {
