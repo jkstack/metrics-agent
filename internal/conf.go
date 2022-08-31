@@ -15,6 +15,12 @@ func load(dir string) *lconf.Configure {
 	defer f.Close()
 	var ret lconf.Configure
 	utils.Assert(kvconf.NewDecoder(f).Decode(&ret))
+	if ret.Task.Process.Limit < 0 {
+		ret.Task.Process.Limit = 200
+	}
+	if ret.Task.Conns.Limit < 0 {
+		ret.Task.Conns.Limit = 500
+	}
 	return &ret
 }
 

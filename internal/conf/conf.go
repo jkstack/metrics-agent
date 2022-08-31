@@ -42,13 +42,13 @@ func (task *task) Parse() {
 	for _, job := range task.Jobs {
 		switch job {
 		case "static":
-			task.Static.enabled = true
+			task.Static.Enabled = true
 		case "usage":
-			task.Usage.enabled = true
+			task.Usage.Enabled = true
 		case "process":
-			task.Process.enabled = true
+			task.Process.Enabled = true
 		case "conns":
-			task.Conns.enabled = true
+			task.Conns.Enabled = true
 		}
 	}
 }
