@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/jkstack/jkframe/conf/kvconf"
+	"github.com/jkstack/jkframe/logging"
 	"github.com/jkstack/jkframe/utils"
 	"github.com/jkstack/libagent/conf"
 )
@@ -21,6 +22,19 @@ func load(dir string) *lconf.Configure {
 	if ret.Task.Conns.Limit < 0 {
 		ret.Task.Conns.Limit = 500
 	}
+	for _, task := range ret.Task.Jobs {
+		switch task {
+		case "static":
+			ret.Task.Static.Enabled = true
+		case "usage":
+			ret.Task.Usage.Enabled = true
+		case "process":
+			ret.Task.Process.Enabled = true
+		case "conns":
+			ret.Task.Conns.Enabled = true
+		}
+	}
+	logging.Info("jobs: %v", ret.Task.Jobs)
 	return &ret
 }
 

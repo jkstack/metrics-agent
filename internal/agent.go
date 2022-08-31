@@ -52,42 +52,42 @@ func (agent *Agent) run() {
 			}
 		}
 	}
-	for _, task := range agent.cfg.Task.Jobs {
-		switch task {
-		case "static":
-			run(agent.cfg.Task.Static.Interval.Duration(), func() *anet.Msg {
-				var msg anet.Msg
-				msg.Type = anet.TypeHMStaticRep
-				msg.HMStatic = getStatic()
-				return &msg
-			})
-		case "usage":
-			run(agent.cfg.Task.Usage.Interval.Duration(), func() *anet.Msg {
-				var msg anet.Msg
-				msg.Type = anet.TypeHMDynamicRep
-				msg.HMDynamicRep = &anet.HMDynamicRep{
-					Usage: getUsage(),
-				}
-				return &msg
-			})
-		case "process":
-			run(agent.cfg.Task.Process.Interval.Duration(), func() *anet.Msg {
-				var msg anet.Msg
-				msg.Type = anet.TypeHMDynamicRep
-				msg.HMDynamicRep = &anet.HMDynamicRep{
-					Process: getProcessList(agent.cfg.Task.Process, 0),
-				}
-				return &msg
-			})
-		case "conns":
-			run(agent.cfg.Task.Conns.Interval.Duration(), func() *anet.Msg {
-				var msg anet.Msg
-				msg.Type = anet.TypeHMDynamicRep
-				msg.HMDynamicRep = &anet.HMDynamicRep{
-					Connections: getConnectionList(agent.cfg.Task.Conns, agent.cfg.Task.Conns.Allow),
-				}
-				return &msg
-			})
-		}
+	if agent.cfg.Task.Static.Enabled {
+		go run(agent.cfg.Task.Static.Interval.Duration(), func() *anet.Msg {
+			var msg anet.Msg
+			msg.Type = anet.TypeHMStaticRep
+			msg.HMStatic = getStatic()
+			return &msg
+		})
+	}
+	if agent.cfg.Task.Usage.Enabled {
+		go run(agent.cfg.Task.Usage.Interval.Duration(), func() *anet.Msg {
+			var msg anet.Msg
+			msg.Type = anet.TypeHMDynamicRep
+			msg.HMDynamicRep = &anet.HMDynamicRep{
+				Usage: getUsage(),
+			}
+			return &msg
+		})
+	}
+	if agent.cfg.Task.Process.Enabled {
+		go run(agent.cfg.Task.Process.Interval.Duration(), func() *anet.Msg {
+			var msg anet.Msg
+			msg.Type = anet.TypeHMDynamicRep
+			msg.HMDynamicRep = &anet.HMDynamicRep{
+				Process: getProcessList(agent.cfg.Task.Process, 0),
+			}
+			return &msg
+		})
+	}
+	if agent.cfg.Task.Conns.Enabled {
+		go run(agent.cfg.Task.Conns.Interval.Duration(), func() *anet.Msg {
+			var msg anet.Msg
+			msg.Type = anet.TypeHMDynamicRep
+			msg.HMDynamicRep = &anet.HMDynamicRep{
+				Connections: getConnectionList(agent.cfg.Task.Conns, agent.cfg.Task.Conns.Allow),
+			}
+			return &msg
+		})
 	}
 }
