@@ -26,11 +26,20 @@ func (agent *Agent) OnReportMonitor() {
 	var msg anet.Msg
 	msg.Type = anet.TypeHMReportAgentStatus
 	bytes := make(map[string]uint64)
-	// TODO
+	count := make(map[string]uint64)
+	bytes["static"] = agent.tkStatic.bytes
+	bytes["usage"] = agent.tkUsage.bytes
+	bytes["process"] = agent.tkProcess.bytes
+	bytes["conns"] = agent.tkConns.bytes
+	count["static"] = agent.tkStatic.count
+	count["usage"] = agent.tkUsage.count
+	count["process"] = agent.tkProcess.count
+	count["conns"] = agent.tkConns.count
 	msg.HMAgentStatus = &anet.HMAgentStatus{
 		Jobs:        agent.cfg.Task.Jobs,
 		Warnings:    atomic.LoadUint64(&agent.warnings),
 		ReportBytes: bytes,
+		ReportCount: count,
 	}
 }
 

@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/jackpal/gateway v1.0.7
 	github.com/jaypipes/ghw v0.9.0
-	github.com/jkstack/anet v0.0.0-20220901101413-4234c11fe452
+	github.com/jkstack/anet v0.0.0-20220901103313-f55a4486d138
 	github.com/jkstack/jkframe v1.0.8
 	github.com/jkstack/libagent v1.0.4
 	github.com/shirou/gopsutil v3.21.11+incompatible
