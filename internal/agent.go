@@ -4,6 +4,7 @@ import (
 	"context"
 	"metrics/internal/conf"
 	"metrics/internal/utils"
+	"sync/atomic"
 	"time"
 
 	"github.com/jkstack/anet"
@@ -18,6 +19,8 @@ type Agent struct {
 	// runtime
 	ctx    context.Context
 	cancel context.CancelFunc
+	// monitor
+	warnings atomic.Uint64
 }
 
 func New(dir, version string) *Agent {
@@ -60,7 +63,7 @@ func (agent *Agent) run() {
 			logging.Info("report static info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMStaticRep
-			msg.HMStatic = getStatic()
+			msg.HMStatic = getStatic(&agent.warnings)
 			return &msg
 		})
 	}
@@ -70,7 +73,7 @@ func (agent *Agent) run() {
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Usage: getUsage(),
+				Usage: getUsage(&agent.warnings),
 			}
 			return &msg
 		})
@@ -81,7 +84,7 @@ func (agent *Agent) run() {
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Process: getProcessList(agent.cfg.Task.Process, 0),
+				Process: getProcessList(agent.cfg.Task.Process, &agent.warnings, 0),
 			}
 			return &msg
 		})
@@ -92,7 +95,7 @@ func (agent *Agent) run() {
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Connections: getConnectionList(agent.cfg.Task.Conns, agent.cfg.Task.Conns.Allow),
+				Connections: getConnectionList(agent.cfg.Task.Conns, &agent.warnings, agent.cfg.Task.Conns.Allow),
 			}
 			return &msg
 		})

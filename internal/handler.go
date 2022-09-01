@@ -21,6 +21,13 @@ func (agent *Agent) OnDisconnect() {
 }
 
 func (agent *Agent) OnReportMonitor() {
+	defer utils.Recover("report agent status")
+	var msg anet.Msg
+	msg.Type = anet.TypeHMReportAgentStatus
+	msg.HMAgentStatus = &anet.HMAgentStatus{
+		Jobs:     agent.cfg.Task.Jobs,
+		Warnings: agent.warnings.Load(),
+	}
 }
 
 func (agent *Agent) OnMessage(msg *anet.Msg) error {
@@ -30,13 +37,13 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 		var rep anet.Msg
 		rep.Type = anet.TypeHMStaticRep
 		rep.TaskID = msg.TaskID
-		rep.HMStatic = getStatic()
+		rep.HMStatic = getStatic(&agent.warnings)
 		agent.chWrite <- &rep
 	case anet.TypeHMDynamicReq:
 		var rep anet.Msg
 		rep.Type = anet.TypeHMDynamicRep
 		rep.TaskID = msg.TaskID
-		rep.HMDynamicRep = getDynamic(msg.HMDynamicReq, agent.cfg)
+		rep.HMDynamicRep = getDynamic(msg.HMDynamicReq, agent.cfg, &agent.warnings)
 		agent.chWrite <- &rep
 	case anet.TypeHMQueryCollect:
 		var rep anet.Msg

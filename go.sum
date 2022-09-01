@@ -160,8 +160,8 @@ github.com/jaypipes/ghw v0.9.0/go.mod h1:dXMo19735vXOjpIBDyDYSp31sB2u4hrtRCMxInq
 github.com/jaypipes/pcidb v1.0.0 h1:vtZIfkiCUE42oYbJS0TAq9XSfSmcsgo9IdxSm9qzYU8=
 github.com/jaypipes/pcidb v1.0.0/go.mod h1:TnYUvqhPBzCKnH34KrIX22kAeEbDCSRJ9cqLRCuNDfk=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
-github.com/jkstack/anet v0.0.0-20220831092750-c211f566f6b8 h1:D8w/bzMhNPBTtNZ1GGWWTymib7ANsSfbgoIH6AONMgo=
-github.com/jkstack/anet v0.0.0-20220831092750-c211f566f6b8/go.mod h1:L9J4lHwDxTsCPX5MNaVa/0UG36JIiDWIJxlp3jmCQxQ=
+github.com/jkstack/anet v0.0.0-20220901101413-4234c11fe452 h1:cD0cXl9k5mBZPohw7ioHzSdkRRNBnfnBc1bgGKXPlZk=
+github.com/jkstack/anet v0.0.0-20220901101413-4234c11fe452/go.mod h1:L9J4lHwDxTsCPX5MNaVa/0UG36JIiDWIJxlp3jmCQxQ=
 github.com/jkstack/jkframe v1.0.8 h1:+hrdYFs7OnwJB3QiYoqfsH3laXYKR/gI56Xc5k88zDs=
 github.com/jkstack/jkframe v1.0.8/go.mod h1:Nvs/TgkQD3OA324+ljCzBlfhd1tvCxhESBXywRB9l/c=
 github.com/jkstack/libagent v1.0.4 h1:4D6OaJgAcUP+9mcwSAQkpU3CiY5ERH46KGBizQ35790=

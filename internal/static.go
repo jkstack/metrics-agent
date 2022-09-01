@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/jackpal/gateway"
@@ -19,22 +20,23 @@ import (
 	"github.com/shirou/gopsutil/v3/host"
 )
 
-func getStatic() *anet.HMStaticPayload {
+func getStatic(warnings *atomic.Uint64) *anet.HMStaticPayload {
 	var ret anet.HMStaticPayload
 	ret.Time = time.Now()
-	fillStaticHostInfo(&ret)
-	fillStaticCpuInfo(&ret)
-	fillStaticMemoryInfo(&ret)
-	fillStaticDiskInfo(&ret)
-	fillStaticNetworkInfo(&ret)
-	fillStaticUserInfo(&ret)
+	fillStaticHostInfo(warnings, &ret)
+	fillStaticCpuInfo(warnings, &ret)
+	fillStaticMemoryInfo(warnings, &ret)
+	fillStaticDiskInfo(warnings, &ret)
+	fillStaticNetworkInfo(warnings, &ret)
+	fillStaticUserInfo(warnings, &ret)
 	return &ret
 }
 
-func fillStaticHostInfo(ret *anet.HMStaticPayload) {
+func fillStaticHostInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	info, err := host.Info()
 	if err != nil {
 		logging.Warning("get host.info: %v", err)
+		warnings.Add(1)
 		return
 	}
 	ret.Host.Name = info.Hostname
@@ -45,6 +47,7 @@ func fillStaticHostInfo(ret *anet.HMStaticPayload) {
 	it, err := getInstallTime()
 	if err != nil {
 		logging.Warning("get install time: %v", err)
+		warnings.Add(1)
 	}
 	ret.OS.Install = it
 	ret.OS.Startup = time.Now().Add(-ret.Host.UpTime)
@@ -52,19 +55,22 @@ func fillStaticHostInfo(ret *anet.HMStaticPayload) {
 	ret.Kernel.Arch = info.KernelArch
 }
 
-func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
+func fillStaticCpuInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	var err error
 	ret.CPU.Physical, err = cpu.Counts(false)
 	if err != nil {
 		logging.Warning("get physical cpu count: %v", err)
+		warnings.Add(1)
 	}
 	ret.CPU.Logical, err = cpu.Counts(true)
 	if err != nil {
 		logging.Warning("get logical cpu count: %v", err)
+		warnings.Add(1)
 	}
 	cores, err := cpu.Info()
 	if err != nil {
 		logging.Warning("get cpu.info: %v", err)
+		warnings.Add(1)
 		return
 	}
 	for _, core := range cores {
@@ -81,10 +87,11 @@ func fillStaticCpuInfo(ret *anet.HMStaticPayload) {
 	}
 }
 
-func fillStaticMemoryInfo(ret *anet.HMStaticPayload) {
+func fillStaticMemoryInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	vm, err := mem.VirtualMemory()
 	if err != nil {
 		logging.Warning("get memory.info: %v", err)
+		warnings.Add(1)
 	}
 	if vm != nil {
 		ret.Memory.Physical = vm.Total
@@ -92,16 +99,18 @@ func fillStaticMemoryInfo(ret *anet.HMStaticPayload) {
 	swap, err := mem.SwapMemory()
 	if err != nil {
 		logging.Warning("get swap.info: %v", err)
+		warnings.Add(1)
 	}
 	if swap != nil {
 		ret.Memory.Swap = swap.Total
 	}
 }
 
-func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
+func fillStaticDiskInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	block, err := ghw.Block()
 	if err != nil {
 		logging.Warning("get blocks: %v", err)
+		warnings.Add(1)
 	}
 	for _, disk := range block.Disks {
 		switch disk.DriveType {
@@ -126,11 +135,13 @@ func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
 	parts, err := disk.Partitions(false)
 	if err != nil {
 		logging.Warning("get partitions: %v", err)
+		warnings.Add(1)
 	}
 	for _, part := range parts {
 		usage, err := disk.Usage(part.Mountpoint)
 		if err != nil {
 			logging.Warning("get partition usage(%s): %v", part.Mountpoint, err)
+			warnings.Add(1)
 		}
 		info := anet.HMPartition{
 			Name:   part.Mountpoint,
@@ -145,15 +156,17 @@ func fillStaticDiskInfo(ret *anet.HMStaticPayload) {
 	}
 }
 
-func fillStaticNetworkInfo(ret *anet.HMStaticPayload) {
+func fillStaticNetworkInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	gw, err := gateway.DiscoverGateway()
 	if err != nil {
 		logging.Warning("get gateway: %v", err)
+		warnings.Add(1)
 	}
 	ret.GateWay = gw.String()
 	intfs, err := net.Interfaces()
 	if err != nil {
 		logging.Warning("get interfaces: %v", err)
+		warnings.Add(1)
 	}
 	for _, intf := range intfs {
 		addrs, _ := intf.Addrs()
@@ -172,10 +185,11 @@ func fillStaticNetworkInfo(ret *anet.HMStaticPayload) {
 	}
 }
 
-func fillStaticUserInfo(ret *anet.HMStaticPayload) {
+func fillStaticUserInfo(warnings *atomic.Uint64, ret *anet.HMStaticPayload) {
 	users, err := user.List()
 	if err != nil {
 		logging.Warning("get user list: %v", err)
+		warnings.Add(1)
 	}
 	for _, user := range users {
 		ret.User = append(ret.User, anet.HMUser{
