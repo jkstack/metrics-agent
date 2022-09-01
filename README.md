@@ -7,7 +7,7 @@
 go语言最低支持linux内核版本`2.6.23`
 
 | 系统   | 版本号 | 内核版本 | 来源 | 是否支持 |
-| ------ | ----- | ------- | ---- | ------- |
+| :----: | :---: | :-----: | ---- | :-----: |
 | ubuntu | 12.04 | 3.2 | https://en.wikipedia.org/wiki/Ubuntu_version_history#Table_of_versions | ✅ |
 | ubuntu | 14.04    | 3.13 | | ✅ |
 | ubuntu | 16.04    | 4.4  | | ✅ |
