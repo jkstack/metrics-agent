@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"metrics/internal/utils"
+	"sync/atomic"
 
 	"github.com/jkstack/anet"
 )
@@ -24,9 +25,12 @@ func (agent *Agent) OnReportMonitor() {
 	defer utils.Recover("report agent status")
 	var msg anet.Msg
 	msg.Type = anet.TypeHMReportAgentStatus
+	bytes := make(map[string]uint64)
+	// TODO
 	msg.HMAgentStatus = &anet.HMAgentStatus{
-		Jobs:     agent.cfg.Task.Jobs,
-		Warnings: agent.warnings.Load(),
+		Jobs:        agent.cfg.Task.Jobs,
+		Warnings:    atomic.LoadUint64(&agent.warnings),
+		ReportBytes: bytes,
 	}
 }
 

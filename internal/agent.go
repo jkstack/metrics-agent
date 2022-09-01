@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"metrics/internal/conf"
 	"metrics/internal/utils"
 	"sync/atomic"
@@ -10,6 +11,11 @@ import (
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
 )
+
+type tick struct {
+	bytes uint64
+	count uint64
+}
 
 type Agent struct {
 	cfgDir  string
@@ -20,7 +26,11 @@ type Agent struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 	// monitor
-	warnings atomic.Uint64
+	warnings  uint64
+	tkStatic  tick
+	tkUsage   tick
+	tkProcess tick
+	tkConns   tick
 }
 
 func New(dir, version string) *Agent {
@@ -47,19 +57,23 @@ func (agent *Agent) run() {
 		agent.cancel()
 	}
 	agent.ctx, agent.cancel = context.WithCancel(context.Background())
-	run := func(interval time.Duration, cb func() *anet.Msg) {
+	run := func(interval time.Duration, tk *tick, cb func() *anet.Msg) {
 		defer utils.Recover("report")
 		for {
 			select {
 			case <-agent.ctx.Done():
 				return
 			case <-time.After(interval):
-				agent.chWrite <- cb()
+				msg := cb()
+				data, _ := json.Marshal(msg)
+				agent.chWrite <- msg
+				atomic.AddUint64(&tk.bytes, uint64(len(data)))
+				atomic.AddUint64(&tk.count, 1)
 			}
 		}
 	}
 	if agent.cfg.Task.Static.Enabled {
-		go run(agent.cfg.Task.Static.Interval.Duration(), func() *anet.Msg {
+		go run(agent.cfg.Task.Static.Interval.Duration(), &agent.tkStatic, func() *anet.Msg {
 			logging.Info("report static info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMStaticRep
@@ -68,7 +82,7 @@ func (agent *Agent) run() {
 		})
 	}
 	if agent.cfg.Task.Usage.Enabled {
-		go run(agent.cfg.Task.Usage.Interval.Duration(), func() *anet.Msg {
+		go run(agent.cfg.Task.Usage.Interval.Duration(), &agent.tkUsage, func() *anet.Msg {
 			logging.Info("report usage info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
@@ -79,7 +93,7 @@ func (agent *Agent) run() {
 		})
 	}
 	if agent.cfg.Task.Process.Enabled {
-		go run(agent.cfg.Task.Process.Interval.Duration(), func() *anet.Msg {
+		go run(agent.cfg.Task.Process.Interval.Duration(), &agent.tkProcess, func() *anet.Msg {
 			logging.Info("report process list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
@@ -90,7 +104,7 @@ func (agent *Agent) run() {
 		})
 	}
 	if agent.cfg.Task.Conns.Enabled {
-		go run(agent.cfg.Task.Conns.Interval.Duration(), func() *anet.Msg {
+		go run(agent.cfg.Task.Conns.Interval.Duration(), &agent.tkConns, func() *anet.Msg {
 			logging.Info("report connections list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep

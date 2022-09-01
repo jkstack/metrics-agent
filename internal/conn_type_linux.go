@@ -11,7 +11,7 @@ import (
 	"github.com/shirou/gopsutil/v3/net"
 )
 
-func connType(warnings *atomic.Uint64, conn net.ConnectionStat) string {
+func connType(warnings *uint64, conn net.ConnectionStat) string {
 	switch conn.Type {
 	case syscall.SOCK_STREAM:
 		if conn.Family == syscall.AF_INET {
@@ -33,6 +33,6 @@ func connType(warnings *atomic.Uint64, conn net.ConnectionStat) string {
 		}
 	}
 	logging.Warning("connection unknown: type=%d, family=%d", conn.Type, conn.Family)
-	warnings.Add(1)
+	atomic.AddUint64(warnings, 1)
 	return "UNKNOWN"
 }
