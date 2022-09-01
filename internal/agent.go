@@ -3,9 +3,11 @@ package internal
 import (
 	"context"
 	"metrics/internal/conf"
+	"metrics/internal/utils"
 	"time"
 
 	"github.com/jkstack/anet"
+	"github.com/jkstack/jkframe/logging"
 )
 
 type Agent struct {
@@ -23,7 +25,7 @@ func New(dir, version string) *Agent {
 		cfgDir:  dir,
 		cfg:     load(dir),
 		version: version,
-		chWrite: make(chan *anet.Msg, 10000),
+		chWrite: make(chan *anet.Msg),
 	}
 	go ag.run()
 	return ag
@@ -43,6 +45,7 @@ func (agent *Agent) run() {
 	}
 	agent.ctx, agent.cancel = context.WithCancel(context.Background())
 	run := func(interval time.Duration, cb func() *anet.Msg) {
+		defer utils.Recover("report")
 		for {
 			select {
 			case <-agent.ctx.Done():
@@ -54,6 +57,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Static.Enabled {
 		go run(agent.cfg.Task.Static.Interval.Duration(), func() *anet.Msg {
+			logging.Info("report static info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMStaticRep
 			msg.HMStatic = getStatic()
@@ -62,6 +66,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Usage.Enabled {
 		go run(agent.cfg.Task.Usage.Interval.Duration(), func() *anet.Msg {
+			logging.Info("report usage info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{
@@ -72,6 +77,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Process.Enabled {
 		go run(agent.cfg.Task.Process.Interval.Duration(), func() *anet.Msg {
+			logging.Info("report process list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{
@@ -82,6 +88,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Conns.Enabled {
 		go run(agent.cfg.Task.Conns.Interval.Duration(), func() *anet.Msg {
+			logging.Info("report connections list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			msg.HMDynamicRep = &anet.HMDynamicRep{

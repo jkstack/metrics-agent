@@ -2,20 +2,28 @@ package internal
 
 import (
 	"context"
+	"metrics/internal/utils"
 
 	"github.com/jkstack/anet"
 )
 
 func (agent *Agent) OnConnect() {
+	if agent.chWrite != nil {
+		close(agent.chWrite)
+		agent.chWrite = nil
+	}
+	agent.chWrite = make(chan *anet.Msg, 10000)
 }
 
 func (agent *Agent) OnDisconnect() {
+	close(agent.chWrite)
 }
 
 func (agent *Agent) OnReportMonitor() {
 }
 
 func (agent *Agent) OnMessage(msg *anet.Msg) error {
+	defer utils.Recover("OnMessage")
 	switch msg.Type {
 	case anet.TypeHMStaticReq:
 		var rep anet.Msg
@@ -32,6 +40,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 	case anet.TypeHMQueryCollect:
 		var rep anet.Msg
 		rep.Type = anet.TypeHMCollectStatus
+		rep.TaskID = msg.TaskID
 		var jobs []anet.HMJob
 		if agent.cfg.Task.Static.Enabled {
 			jobs = append(jobs, anet.HMJob{
@@ -61,6 +70,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 			Jobs:       jobs,
 			ConnsAllow: agent.cfg.Task.Conns.Allow,
 		}
+		agent.chWrite <- &rep
 	case anet.TypeHMChangeCollectStatus:
 		agent.cfg.Task.Static.Enabled = false
 		agent.cfg.Task.Usage.Enabled = false
@@ -90,6 +100,9 @@ func (agent *Agent) LoopWrite(ctx context.Context, ch chan *anet.Msg) error {
 		case <-ctx.Done():
 			return ctx.Err()
 		case msg := <-agent.chWrite:
+			if msg == nil {
+				continue
+			}
 			ch <- msg
 		}
 	}
