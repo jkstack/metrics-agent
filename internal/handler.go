@@ -41,6 +41,7 @@ func (agent *Agent) OnReportMonitor() {
 		ReportBytes: bytes,
 		ReportCount: count,
 	}
+	agent.chWrite <- &msg
 }
 
 func (agent *Agent) OnMessage(msg *anet.Msg) error {
