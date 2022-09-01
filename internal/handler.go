@@ -17,6 +17,7 @@ func (agent *Agent) OnConnect() {
 
 func (agent *Agent) OnDisconnect() {
 	close(agent.chWrite)
+	agent.chWrite = nil
 }
 
 func (agent *Agent) OnReportMonitor() {
