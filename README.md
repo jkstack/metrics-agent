@@ -6,22 +6,23 @@
 
 go语言最低支持linux内核版本`2.6.23`
 
-| 系统    | 版本 | 内核版本 | 发布时间 | 是否支持 |
-| -------------- | ----- | ----- | ------- |----- |
-| centos         | 6+    | x.x.x | 2011/07 | TODO |
-| redhat         | 6+    | x.x.x | 2010/11 | TODO |
-| fedora         | 12+   | x.x.x | 2009/11 | TODO |
-| debian         | 5+    | x.x.x | 2009/02 | TODO |
-| ubuntu         | 8+    | x.x.x | 2008/04 | TODO |
-| suse           | 11+   | x.x.x | 2009/03 | TODO |
-| windows        | xp    |       | 2001/10 | TODO |
-| windows        | vista |       | 2007/01 | TODO |
-| windows        | 7     |       | 2009/10 | TODO |
-| windows        | 10    |       | 2015/07 | TODO |
-| windows        | 11    |       | 2021/10 | TODO |
-| windows server | 2003  |       | 2003/04 | TODO |
-| windows server | 2008  |       | 2008/02 | TODO |
-| windows server | 2012  |       | 2012/08 | TODO |
-| windows server | 2016  |       | 2016/10 | TODO |
-| windows server | 2019  |       | 2018/10 | TODO |
-| windows server | 2022  |       | 2021/08 | TODO |
+| 系统   | 版本号 | 内核版本 | 来源 | 是否支持 |
+| ------ | ----- | ------- | ---- | ------- |
+| ubuntu | 12.04 | 3.2 | https://en.wikipedia.org/wiki/Ubuntu_version_history#Table_of_versions | ✅ |
+| ubuntu | 14.04    | 3.13 | ✅ |
+| ubuntu | 16.04    | 4.4  | ✅ |
+| ubuntu | 18.04    | 4.15 | ✅ |
+| ubuntu | 20.04    | 5.4  | ✅ |
+| ubuntu | 22.04    | 5.15 | ✅ |
+| suse   | 10(SP4)  | 2.6.16.60-0.132.1 | https://www.suse.com/support/kb/doc/?id=000019587 | ❌ |
+| suse   | 11(SP4)  | 3.0.101-108.135.1      | ✅ |
+| suse   | 12(SP5)  | 4.12.14-122.130.1      | ✅ |
+| suse   | 15(SP4)  | 5.14.21-150400.24.18.1 | ✅ |
+| redhat | 5.11     | 2.6.18-398 | https://access.redhat.com/articles/3078 | ❌ |
+| redhat | 6.1      | 2.6.32-754     | ✅ |
+| redhat | 7.9      | 3.10.0-1160    | ✅ |
+| redhat | 8.6      | 4.18.0-372.9.1 | ✅ |
+| centos | 5.11     | 2.6.18-398 | https://vault.centos.org/5.11/os/Source/ | ❌ |
+| centos | 6.1      | 2.6.32-754 | https://vault.centos.org/6.10/os/Source/SPackages/ | ✅ |
+| centos | 7.9-2009 |3.10.0-1160 | https://vault.centos.org/7.9.2009/os/Source/SPackages/ | ✅ |
+| centos | 8.5.2111 | 4.18.0-348 | https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/ | ✅ |
