@@ -26,6 +26,8 @@ func Type(warnings *uint64, conn net.ConnectionStat) string {
 			return "udp4"
 		} else if conn.Family == syscall.AF_INET6 {
 			return "udp6"
+		} else if conn.Family == syscall.AF_FILE {
+			return "file"
 		}
 	default:
 		if conn.Family == syscall.AF_UNIX {
