@@ -1,7 +1,7 @@
 //go:build windows
 // +build windows
 
-package internal
+package install
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func getInstallTime() (time.Time, error) {
+func Time() (time.Time, error) {
 	fi, err := os.Stat(`C:\Windows\system.ini`)
 	if err != nil {
 		return time.Time{}, err

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"metrics/internal/conf"
+	"metrics/internal/conn"
 	"runtime"
 	"sort"
 	"sync/atomic"
@@ -246,15 +247,15 @@ func getConnectionList(cfg conf.ConnsConfigure, warnings *uint64, allow []string
 			atomic.AddUint64(warnings, 1)
 			continue
 		}
-		for _, conn := range conns {
+		for _, c := range conns {
 			limit.Wait(context.Background())
 			ret = append(ret, anet.HMDynamicConnection{
-				Fd:     conn.Fd,
-				Pid:    conn.Pid,
-				Type:   connType(warnings, conn),
-				Local:  addr(conn.Laddr),
-				Remote: addr(conn.Raddr),
-				Status: conn.Status,
+				Fd:     c.Fd,
+				Pid:    c.Pid,
+				Type:   conn.Type(warnings, c),
+				Local:  addr(c.Laddr),
+				Remote: addr(c.Raddr),
+				Status: c.Status,
 			})
 		}
 	}

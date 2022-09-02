@@ -2,6 +2,8 @@
 
 package user
 
+import "metrics/internal/errors"
+
 func List() ([]User, error) {
-	return nil, errNotSupported
+	return nil, errors.ErrUnsupported
 }

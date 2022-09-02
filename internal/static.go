@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"metrics/internal/errors"
+	"metrics/internal/install"
 	"metrics/internal/user"
 	"net"
 	"runtime"
@@ -44,10 +46,12 @@ func fillStaticHostInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 	ret.OS.Name = info.OS
 	ret.OS.PlatformName = info.Platform
 	ret.OS.PlatformVersion = info.PlatformVersion
-	it, err := getInstallTime()
+	it, err := install.Time()
 	if err != nil {
-		logging.Warning("get install time: %v", err)
-		atomic.AddUint64(warnings, 1)
+		if err != errors.ErrUnsupported {
+			logging.Warning("get install time: %v", err)
+			atomic.AddUint64(warnings, 1)
+		}
 	}
 	ret.OS.Install = it
 	ret.OS.Startup = time.Now().Add(-ret.Host.UpTime)
@@ -188,7 +192,7 @@ func fillStaticNetworkInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 func fillStaticUserInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 	users, err := user.List()
 	if err != nil {
-		if err != errUnsupported {
+		if err != errors.ErrUnsupported {
 			logging.Warning("get user list: %v", err)
 			atomic.AddUint64(warnings, 1)
 		}

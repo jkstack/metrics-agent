@@ -1,7 +1,7 @@
-//go:build !linux
-// +build !linux
+//go:build linux
+// +build linux
 
-package internal
+package conn
 
 import (
 	"sync/atomic"
@@ -11,13 +11,15 @@ import (
 	"github.com/shirou/gopsutil/v3/net"
 )
 
-func connType(warnings *uint64, conn net.ConnectionStat) string {
+func Type(warnings *uint64, conn net.ConnectionStat) string {
 	switch conn.Type {
 	case syscall.SOCK_STREAM:
 		if conn.Family == syscall.AF_INET {
 			return "tcp4"
 		} else if conn.Family == syscall.AF_INET6 {
 			return "tcp6"
+		} else if conn.Family == syscall.AF_FILE {
+			return "file"
 		}
 	case syscall.SOCK_DGRAM:
 		if conn.Family == syscall.AF_INET {
