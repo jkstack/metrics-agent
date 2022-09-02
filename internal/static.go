@@ -188,8 +188,10 @@ func fillStaticNetworkInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 func fillStaticUserInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 	users, err := user.List()
 	if err != nil {
-		logging.Warning("get user list: %v", err)
-		atomic.AddUint64(warnings, 1)
+		if err != errUnsupported {
+			logging.Warning("get user list: %v", err)
+			atomic.AddUint64(warnings, 1)
+		}
 	}
 	for _, user := range users {
 		ret.User = append(ret.User, anet.HMUser{

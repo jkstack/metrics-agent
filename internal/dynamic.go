@@ -106,6 +106,8 @@ func getProcessList(cfg conf.ProcessConfigure, warnings *uint64, top int) []anet
 	if err != nil {
 		logging.Warning("get process list: %v", err)
 		atomic.AddUint64(warnings, 1)
+	} else {
+		pids = []int32{}
 	}
 	limit := rate.NewLimiter(rate.Inf, 1)
 	if cfg.Limit > 0 {
