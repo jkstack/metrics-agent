@@ -58,16 +58,16 @@ func (agent *Agent) run() {
 	}
 	agent.ctx, agent.cancel = context.WithCancel(context.Background())
 	run := func(interval time.Duration, tk *tick, cb func() *anet.Msg) {
-		defer utils.Recover("report")
 		save := func() {
+			defer utils.Recover("save")
 			msg := cb()
 			data, _ := json.Marshal(msg)
 			agent.chWrite <- msg
 			atomic.AddUint64(&tk.bytes, uint64(len(data)))
 			atomic.AddUint64(&tk.count, 1)
 		}
+		save()
 		for {
-			save()
 			select {
 			case <-agent.ctx.Done():
 				return
