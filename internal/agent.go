@@ -61,8 +61,11 @@ func (agent *Agent) run() {
 		save := func() {
 			defer utils.Recover("save")
 			msg := cb()
-			data, _ := json.Marshal(msg)
+			if agent.chWrite == nil {
+				return
+			}
 			agent.chWrite <- msg
+			data, _ := json.Marshal(msg)
 			atomic.AddUint64(&tk.bytes, uint64(len(data)))
 			atomic.AddUint64(&tk.count, 1)
 		}

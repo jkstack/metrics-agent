@@ -4,6 +4,7 @@ import (
 	"context"
 	"metrics/internal/utils"
 	"sync/atomic"
+	"time"
 
 	"github.com/jkstack/anet"
 )
@@ -17,7 +18,9 @@ func (agent *Agent) OnConnect() {
 }
 
 func (agent *Agent) OnDisconnect() {
-	close(agent.chWrite)
+	if agent.chWrite != nil {
+		close(agent.chWrite)
+	}
 	agent.chWrite = nil
 }
 
@@ -118,6 +121,10 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 
 func (agent *Agent) LoopWrite(ctx context.Context, ch chan *anet.Msg) error {
 	for {
+		if agent.chWrite == nil {
+			time.Sleep(time.Second)
+			continue
+		}
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
