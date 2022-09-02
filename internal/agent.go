@@ -86,8 +86,13 @@ func (agent *Agent) run() {
 			logging.Info("report usage info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
+			begin := time.Now()
+			usage := getUsage(&agent.warnings)
+			end := time.Now()
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Usage: getUsage(&agent.warnings),
+				Begin: begin,
+				End:   end,
+				Usage: usage,
 			}
 			return &msg
 		})
@@ -97,8 +102,13 @@ func (agent *Agent) run() {
 			logging.Info("report process list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
+			begin := time.Now()
+			process := getProcessList(agent.cfg.Task.Process, &agent.warnings, 0)
+			end := time.Now()
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Process: getProcessList(agent.cfg.Task.Process, &agent.warnings, 0),
+				Begin:   begin,
+				End:     end,
+				Process: process,
 			}
 			return &msg
 		})
@@ -108,8 +118,13 @@ func (agent *Agent) run() {
 			logging.Info("report connections list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
+			begin := time.Now()
+			conns := getConnectionList(agent.cfg.Task.Conns, &agent.warnings, agent.cfg.Task.Conns.Allow)
+			end := time.Now()
 			msg.HMDynamicRep = &anet.HMDynamicRep{
-				Connections: getConnectionList(agent.cfg.Task.Conns, &agent.warnings, agent.cfg.Task.Conns.Allow),
+				Begin:       begin,
+				End:         end,
+				Connections: conns,
 			}
 			return &msg
 		})

@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"sort"
 	"sync/atomic"
+	"time"
 
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
@@ -23,6 +24,7 @@ func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure, warnings *uint64) *
 	top := req.Top
 	allowConns := req.AllowConns
 	var ret anet.HMDynamicRep
+	ret.Begin = time.Now()
 	for _, req := range req.Req {
 		switch req {
 		case anet.HMReqUsage:
@@ -33,6 +35,7 @@ func getDynamic(req *anet.HMDynamicReq, cfg *conf.Configure, warnings *uint64) *
 			ret.Connections = getConnectionList(cfg.Task.Conns, warnings, allowConns)
 		}
 	}
+	ret.End = time.Now()
 	return &ret
 }
 
