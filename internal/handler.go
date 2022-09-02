@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/jkstack/anet"
+	"github.com/jkstack/jkframe/logging"
 )
 
 func (agent *Agent) OnConnect() {
@@ -115,6 +116,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 		}
 		agent.OnRewriteConfigure()
 		agent.run()
+		logging.Info("jobs: %v", msg.HMChangeStatus.Jobs)
 	}
 	return nil
 }
