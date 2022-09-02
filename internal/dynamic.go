@@ -55,11 +55,9 @@ func getUsage(warnings *uint64) *anet.HMDynamicUsage {
 		ret.Memory.Used = memStat.Used
 		ret.Memory.Free = memStat.Free
 		ret.Memory.Available = memStat.Available
-		ret.Memory.Total = memStat.Total
 		ret.Memory.Usage = utils.Float64P2(memStat.UsedPercent)
 		ret.Memory.SwapUsed = memStat.SwapCached
 		ret.Memory.SwapFree = memStat.SwapFree
-		ret.Memory.SwapTotal = memStat.Total
 	}
 	parts, err := disk.Partitions(false)
 	if err != nil {
