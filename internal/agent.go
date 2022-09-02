@@ -81,7 +81,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Static.Enabled {
 		go run(agent.cfg.Task.Static.Interval.Duration(), &agent.tkStatic, func() *anet.Msg {
-			logging.Info("report static info")
+			logging.Debug("report static info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMStaticRep
 			msg.HMStatic = getStatic(&agent.warnings)
@@ -90,7 +90,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Usage.Enabled {
 		go run(agent.cfg.Task.Usage.Interval.Duration(), &agent.tkUsage, func() *anet.Msg {
-			logging.Info("report usage info")
+			logging.Debug("report usage info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
@@ -106,7 +106,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Process.Enabled {
 		go run(agent.cfg.Task.Process.Interval.Duration(), &agent.tkProcess, func() *anet.Msg {
-			logging.Info("report process list")
+			logging.Debug("report process list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
@@ -122,7 +122,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Conns.Enabled {
 		go run(agent.cfg.Task.Conns.Interval.Duration(), &agent.tkConns, func() *anet.Msg {
-			logging.Info("report connections list")
+			logging.Debug("report connections list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
