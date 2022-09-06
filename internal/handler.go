@@ -29,21 +29,37 @@ func (agent *Agent) OnReportMonitor() {
 	defer utils.Recover("report agent status")
 	var msg anet.Msg
 	msg.Type = anet.TypeHMReportAgentStatus
-	bytes := make(map[string]uint64)
-	count := make(map[string]uint64)
-	bytes["static"] = agent.tkStatic.bytes
-	bytes["usage"] = agent.tkUsage.bytes
-	bytes["process"] = agent.tkProcess.bytes
-	bytes["conns"] = agent.tkConns.bytes
-	count["static"] = agent.tkStatic.count
-	count["usage"] = agent.tkUsage.count
-	count["process"] = agent.tkProcess.count
-	count["conns"] = agent.tkConns.count
+	var jobs []anet.HMAgentJob
+	for _, job := range agent.cfg.Task.Jobs {
+		var interval, sent, count uint64
+		switch job {
+		case "static":
+			interval = uint64(agent.cfg.Task.Static.Interval.Duration().Seconds())
+			sent = agent.tkStatic.bytes
+			count = agent.tkStatic.count
+		case "usage":
+			interval = uint64(agent.cfg.Task.Usage.Interval.Duration().Seconds())
+			sent = agent.tkUsage.bytes
+			count = agent.tkUsage.count
+		case "process":
+			interval = uint64(agent.cfg.Task.Process.Interval.Duration().Seconds())
+			sent = agent.tkProcess.bytes
+			count = agent.tkProcess.count
+		case "conns":
+			interval = uint64(agent.cfg.Task.Conns.Interval.Duration().Seconds())
+			sent = agent.tkConns.bytes
+			count = agent.tkConns.count
+		}
+		jobs = append(jobs, anet.HMAgentJob{
+			Name:      job,
+			Interval:  interval,
+			BytesSent: sent,
+			Count:     count,
+		})
+	}
 	msg.HMAgentStatus = &anet.HMAgentStatus{
-		Jobs:        agent.cfg.Task.Jobs,
-		Warnings:    atomic.LoadUint64(&agent.warnings),
-		ReportBytes: bytes,
-		ReportCount: count,
+		Jobs:     jobs,
+		Warnings: atomic.LoadUint64(&agent.warnings),
 	}
 	agent.chWrite <- &msg
 }
