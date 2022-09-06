@@ -19,5 +19,5 @@ func Time() (time.Time, error) {
 	if !ok {
 		return time.Time{}, fmt.Errorf("file sys: %T", fi.Sys())
 	}
-	return time.Unix(st.Ctim.Sec, st.Ctim.Nsec), nil
+	return time.Unix(int64(st.Ctim.Sec), int64(st.Ctim.Nsec)), nil
 }
