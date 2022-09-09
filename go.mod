@@ -7,7 +7,7 @@ require (
 	github.com/jaypipes/ghw v0.9.0
 	github.com/jkstack/anet v0.0.0-20220906102831-1008d5bb8608
 	github.com/jkstack/jkframe v1.0.8
-	github.com/jkstack/libagent v1.0.6
+	github.com/jkstack/libagent v1.0.7
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.7
 	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9
@@ -27,8 +27,8 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jaypipes/pcidb v1.0.0 // indirect
-	github.com/kardianos/service v1.2.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20220517141722-cf486979b281 // indirect
+	github.com/lwch/service v1.99.99 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/opencontainers/runtime-spec v1.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
