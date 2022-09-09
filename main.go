@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"metrics/internal"
 	"os"
+	"path/filepath"
 	rt "runtime"
 
+	"github.com/jkstack/jkframe/utils"
 	agent "github.com/jkstack/libagent"
 )
 
@@ -42,7 +44,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	app := internal.New(*cf, version)
+	dir, err := filepath.Abs(*cf)
+	utils.Assert(err)
+
+	app := internal.New(dir, version)
 
 	switch *act {
 	case "install":
