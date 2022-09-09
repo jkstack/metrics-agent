@@ -4,20 +4,31 @@
 package install
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
 	"syscall"
 	"time"
 )
 
 func Time() (time.Time, error) {
-	fi, err := os.Stat("/etc")
+	files, err := filepath.Glob("/etc/*")
 	if err != nil {
 		return time.Time{}, err
 	}
-	st, ok := fi.Sys().(*syscall.Stat_t)
-	if !ok {
-		return time.Time{}, fmt.Errorf("file sys: %T", fi.Sys())
+	t := time.Now()
+	for _, file := range files {
+		fi, err := os.Stat(file)
+		if err != nil {
+			continue
+		}
+		st, ok := fi.Sys().(*syscall.Stat_t)
+		if !ok {
+			continue
+		}
+		ts := time.Unix(int64(st.Ctim.Sec), int64(st.Ctim.Nsec))
+		if ts.Before(t) {
+			t = ts
+		}
 	}
-	return time.Unix(int64(st.Ctim.Sec), int64(st.Ctim.Nsec)), nil
+	return t, nil
 }
