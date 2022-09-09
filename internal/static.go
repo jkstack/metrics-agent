@@ -54,7 +54,7 @@ func fillStaticHostInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 		}
 	}
 	ret.OS.Install = it
-	ret.OS.Startup = time.Now().Add(-ret.Host.UpTime)
+	ret.OS.Startup = time.Unix(int64(info.BootTime), 0)
 	ret.Kernel.Version = info.KernelVersion
 	ret.Kernel.Arch = info.KernelArch
 }
