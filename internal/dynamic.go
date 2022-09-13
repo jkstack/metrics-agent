@@ -114,7 +114,7 @@ func getProcessList(cfg conf.ProcessConfigure, warnings *uint64, top int) []anet
 	if cfg.Limit > 0 {
 		limit = rate.NewLimiter(rate.Limit(cfg.Limit), 1)
 	}
-	var ret []anet.HMDynamicProcess
+	var list []anet.HMDynamicProcess
 	for _, pid := range pids {
 		limit.Wait(context.Background())
 		p := process.Process{Pid: pid}
@@ -124,33 +124,38 @@ func getProcessList(cfg conf.ProcessConfigure, warnings *uint64, top int) []anet
 		if err != nil {
 			logging.Warning("process => get cpu_usage(%d): %v", pid, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		dy.CpuUsage = utils.Float64P2(usage)
-		ret = append(ret, dy)
+		list = append(list, dy)
 	}
-	if top > 0 && len(ret) > top {
-		sort.Slice(ret, func(i, j int) bool {
-			return ret[i].CpuUsage > ret[j].CpuUsage
+	if top > 0 && len(list) > top {
+		sort.Slice(list, func(i, j int) bool {
+			return list[i].CpuUsage > list[j].CpuUsage
 		})
-		ret = ret[:top]
+		list = list[:top]
 	}
-	for i, dy := range ret {
+	var ret []anet.HMDynamicProcess
+	for _, dy := range list {
 		limit.Wait(context.Background())
 		p := process.Process{Pid: dy.ID}
 		dy.ParentID, err = p.Ppid()
 		if err != nil {
 			logging.Warning("process => get parent id(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		dy.User, err = p.Username()
 		if err != nil {
 			logging.Warning("process => get username(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		memInfo, err := p.MemoryInfo()
 		if err != nil {
 			logging.Warning("process => get memory_info(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		if memInfo != nil {
 			dy.RssMemory = memInfo.RSS
@@ -161,17 +166,20 @@ func getProcessList(cfg conf.ProcessConfigure, warnings *uint64, top int) []anet
 		if err != nil {
 			logging.Warning("process => get memory_usage(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		dy.MemoryUsage = utils.Float64P2(percent)
 		dy.Cmd, err = p.CmdlineSlice()
 		if err != nil {
 			logging.Warning("process => get cmd(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		conns, err := p.Connections()
 		if err != nil {
 			logging.Warning("process => get connections(%d): %v", dy.ID, err)
 			atomic.AddUint64(warnings, 1)
+			continue
 		}
 		for _, conn := range conns {
 			if conn.Status == "LISTEN" {
@@ -179,7 +187,7 @@ func getProcessList(cfg conf.ProcessConfigure, warnings *uint64, top int) []anet
 			}
 		}
 		dy.Connections = len(conns)
-		ret[i] = dy
+		ret = append(ret, dy)
 	}
 	return ret
 }
