@@ -236,6 +236,12 @@ github.com/jkstack/jkframe v1.0.8 h1:+hrdYFs7OnwJB3QiYoqfsH3laXYKR/gI56Xc5k88zDs
 github.com/jkstack/jkframe v1.0.8/go.mod h1:Nvs/TgkQD3OA324+ljCzBlfhd1tvCxhESBXywRB9l/c=
 github.com/jkstack/libagent v1.0.7 h1:VlhcNronxTVxMjlNHYif2wr4K855mL+rzKn2ErD4hPY=
 github.com/jkstack/libagent v1.0.7/go.mod h1:WlrIQYWdKhHyI1dcSrftqExXMDfv75Xvx/2PR3jj/Iw=
+github.com/jkstack/libagent v1.0.8 h1:+ioq7VfG/yQ2Tz7ZXzqHB+/AwkPJGbYrKIKk4+popAw=
+github.com/jkstack/libagent v1.0.8/go.mod h1:WlrIQYWdKhHyI1dcSrftqExXMDfv75Xvx/2PR3jj/Iw=
+github.com/jkstack/libagent v1.1.0 h1:/Otak5bWJOG2UfYTyxzbkr7xipBGI2tRwo99k84KExw=
+github.com/jkstack/libagent v1.1.0/go.mod h1:WlrIQYWdKhHyI1dcSrftqExXMDfv75Xvx/2PR3jj/Iw=
+github.com/jkstack/libagent v1.1.1 h1:bTee9s2psClzWiv5vSdNbEO0TQ0xxmAnJptsX5+poGk=
+github.com/jkstack/libagent v1.1.1/go.mod h1:WlrIQYWdKhHyI1dcSrftqExXMDfv75Xvx/2PR3jj/Iw=
 github.com/jpillora/backoff v1.0.0/go.mod h1:J/6gKK9jxlEcS3zixgDgUAsiuZ7yrSoa/FX5e0EB2j4=
 github.com/json-iterator/go v1.1.6/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/json-iterator/go v1.1.10/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=

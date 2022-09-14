@@ -31,7 +31,7 @@ func showVersion() {
 func main() {
 	cf := flag.String("conf", "", "config file dir")
 	ver := flag.Bool("version", false, "show version info")
-	act := flag.String("action", "", "install, uninstall")
+	act := flag.String("action", "", "install, uninstall, start, stop")
 	flag.Parse()
 
 	if *ver {
@@ -44,17 +44,24 @@ func main() {
 		os.Exit(1)
 	}
 
+	var app agent.App
+
 	dir, err := filepath.Abs(*cf)
 	utils.Assert(err)
 
-	app := internal.New(dir, version)
+	dummy := agent.NewDummyApp("metrics-agent", dir)
 
 	switch *act {
 	case "install":
-		agent.RegisterService(app)
+		agent.RegisterService(dummy)
 	case "uninstall":
-		agent.UnregisterService(app)
+		agent.UnregisterService(dummy)
+	case "start":
+		agent.Start(dummy)
+	case "stop":
+		agent.Stop(dummy)
 	default:
+		app = internal.New(dir, version)
 		agent.Run(app)
 	}
 }
