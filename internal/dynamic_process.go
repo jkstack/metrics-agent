@@ -82,12 +82,13 @@ func processList(cfg conf.ProcessConfigure, limit *rate.Limiter, warnings *uint6
 	if err != nil {
 		logging.Warning("get process list: %v", err)
 		atomic.AddUint64(warnings, 1)
-	} else if len(pids) == 1 && pids[0] == 0 {
-		pids = []int32{}
 	}
 
 	var list []anet.HMDynamicProcess
 	for _, pid := range pids {
+		if pid == 0 {
+			continue
+		}
 		limit.Wait(context.Background())
 		p := process.Process{Pid: pid}
 		var dy anet.HMDynamicProcess
