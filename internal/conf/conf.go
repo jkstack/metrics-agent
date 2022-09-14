@@ -12,6 +12,7 @@ type task struct {
 	Usage   usage            `kv:"usage"`
 	Process ProcessConfigure `kv:"process"`
 	Conns   ConnsConfigure   `kv:"conns"`
+	Temps   TempsConfigure   `kv:"temps"`
 }
 
 // Configure configure
@@ -49,6 +50,8 @@ func (task *task) Parse() {
 			task.Process.Enabled = true
 		case "conns":
 			task.Conns.Enabled = true
+		case "temps":
+			task.Temps.Enabled = true
 		}
 	}
 }

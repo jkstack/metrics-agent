@@ -49,6 +49,10 @@ func (agent *Agent) OnReportMonitor() {
 			interval = uint64(agent.cfg.Task.Conns.Interval.Duration().Seconds())
 			sent = agent.tkConns.bytes
 			count = agent.tkConns.count
+		case "temps":
+			interval = uint64(agent.cfg.Task.Temps.Interval.Duration().Seconds())
+			sent = agent.tkTemps.bytes
+			count = agent.tkTemps.count
 		}
 		jobs = append(jobs, anet.HMAgentJob{
 			Name:      job,
@@ -108,6 +112,12 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 				Interval: agent.cfg.Task.Conns.Interval.Duration(),
 			})
 		}
+		if agent.cfg.Task.Temps.Enabled {
+			jobs = append(jobs, anet.HMJob{
+				Name:     "temps",
+				Interval: agent.cfg.Task.Temps.Interval.Duration(),
+			})
+		}
 		rep.HMCollectStatus = &anet.HMReportStatusPayload{
 			Jobs:       jobs,
 			ConnsAllow: agent.cfg.Task.Conns.Allow,
@@ -118,6 +128,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 		agent.cfg.Task.Usage.Enabled = false
 		agent.cfg.Task.Process.Enabled = false
 		agent.cfg.Task.Conns.Enabled = false
+		agent.cfg.Task.Temps.Enabled = false
 		for _, job := range msg.HMChangeStatus.Jobs {
 			switch job {
 			case "static":
@@ -128,6 +139,8 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 				agent.cfg.Task.Process.Enabled = true
 			case "conns":
 				agent.cfg.Task.Conns.Enabled = true
+			case "temps":
+				agent.cfg.Task.Temps.Enabled = true
 			}
 		}
 		agent.OnRewriteConfigure()

@@ -31,6 +31,7 @@ type Agent struct {
 	tkUsage   tick
 	tkProcess tick
 	tkConns   tick
+	tkTemps   tick
 }
 
 func New(dir, version string) *Agent {
@@ -81,7 +82,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Static.Enabled {
 		go run(agent.cfg.Task.Static.Interval.Duration(), &agent.tkStatic, func() *anet.Msg {
-			logging.Debug("report static info")
+			logging.Debug("collect static info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMStaticRep
 			msg.HMStatic = getStatic(&agent.warnings)
@@ -90,7 +91,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Usage.Enabled {
 		go run(agent.cfg.Task.Usage.Interval.Duration(), &agent.tkUsage, func() *anet.Msg {
-			logging.Debug("report usage info")
+			logging.Debug("collect usage info")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
@@ -106,7 +107,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Process.Enabled {
 		go run(agent.cfg.Task.Process.Interval.Duration(), &agent.tkProcess, func() *anet.Msg {
-			logging.Debug("report process list")
+			logging.Debug("collect process list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
@@ -122,7 +123,7 @@ func (agent *Agent) run() {
 	}
 	if agent.cfg.Task.Conns.Enabled {
 		go run(agent.cfg.Task.Conns.Interval.Duration(), &agent.tkConns, func() *anet.Msg {
-			logging.Debug("report connections list")
+			logging.Debug("collect connections list")
 			var msg anet.Msg
 			msg.Type = anet.TypeHMDynamicRep
 			begin := time.Now()
@@ -132,6 +133,22 @@ func (agent *Agent) run() {
 				Begin:       begin,
 				End:         end,
 				Connections: conns,
+			}
+			return &msg
+		})
+	}
+	if agent.cfg.Task.Temps.Enabled {
+		go run(agent.cfg.Task.Temps.Interval.Duration(), &agent.tkTemps, func() *anet.Msg {
+			logging.Debug("collect sensors temperatures")
+			var msg anet.Msg
+			msg.Type = anet.TypeHMDynamicRep
+			begin := time.Now()
+			temps := getSensorsTemperatures(agent.cfg.Task.Temps, &agent.warnings)
+			end := time.Now()
+			msg.HMDynamicRep = &anet.HMDynamicRep{
+				Begin:               begin,
+				End:                 end,
+				SensorsTemperatures: temps,
 			}
 			return &msg
 		})
