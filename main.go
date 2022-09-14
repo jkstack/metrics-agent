@@ -53,13 +53,33 @@ func main() {
 
 	switch *act {
 	case "install":
-		agent.RegisterService(dummy)
+		err := agent.RegisterService(dummy)
+		if err != nil {
+			fmt.Printf("can not register service: %v\n", err)
+			return
+		}
+		fmt.Println("register service success")
 	case "uninstall":
-		agent.UnregisterService(dummy)
+		err := agent.UnregisterService(dummy)
+		if err != nil {
+			fmt.Printf("can not unregister service: %v\n", err)
+			return
+		}
+		fmt.Println("unregister service success")
 	case "start":
-		agent.Start(dummy)
+		err := agent.Start(dummy)
+		if err != nil {
+			fmt.Printf("can not start service: %v\n", err)
+			return
+		}
+		fmt.Println("start service success")
 	case "stop":
-		agent.Stop(dummy)
+		err := agent.Stop(dummy)
+		if err != nil {
+			fmt.Printf("can not stop service: %v\n", err)
+			return
+		}
+		fmt.Println("stop service success")
 	default:
 		app = internal.New(dir, version)
 		agent.Run(app)
