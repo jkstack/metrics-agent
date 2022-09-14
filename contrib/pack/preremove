@@ -13,6 +13,6 @@ case "$action" in
   "2" | "upgrade")
     ;;
   *)
-    /opt/metrics-agent/bin/metrics-agent -action uninstall -conf /opt/metrics-agent/conf/agent.conf
+    /opt/metrics-agent/bin/metrics-agent -action uninstall
     ;;
 esac
