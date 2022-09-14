@@ -1,0 +1,2 @@
+#!/bin/sh
+/opt/metrics-agent/bin/metrics-agent -action uninstall -conf /opt/metrics-agent/conf/agent.conf
