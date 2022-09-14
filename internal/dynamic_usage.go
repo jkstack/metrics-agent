@@ -6,10 +6,10 @@ import (
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
 	"github.com/jkstack/jkframe/utils"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/mem"
-	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
+	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/net"
 )
 
 func getUsage(warnings *uint64) *anet.HMDynamicUsage {
