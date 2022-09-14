@@ -2,6 +2,7 @@ package internal
 
 import (
 	"metrics/internal/conf"
+	"runtime"
 	"sync/atomic"
 
 	"github.com/jkstack/anet"
@@ -11,6 +12,9 @@ import (
 )
 
 func getSensorsTemperatures(cfg conf.TempsConfigure, warnings *uint64) []anet.HMSensorTemperature {
+	if runtime.GOOS == "windows" {
+		return nil
+	}
 	temps, err := host.SensorsTemperatures()
 	if err != nil {
 		logging.Warning("get sensors temperatures: %v", err)
