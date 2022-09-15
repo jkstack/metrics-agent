@@ -2,13 +2,15 @@ module metrics
 
 go 1.18
 
+replace github.com/kardianos/service => github.com/lwch/service v1.2.1-fixtag
+
 require (
 	github.com/goreleaser/nfpm/v2 v2.18.1
 	github.com/jackpal/gateway v1.0.7
 	github.com/jaypipes/ghw v0.9.0
 	github.com/jkstack/anet v0.0.0-20220914031259-662a503d0cb1
 	github.com/jkstack/jkframe v1.0.8
-	github.com/jkstack/libagent v1.1.1
+	github.com/jkstack/libagent v1.1.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.7
 	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9
@@ -51,11 +53,11 @@ require (
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/jaypipes/pcidb v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
+	github.com/kardianos/service v1.2.1 // indirect
 	github.com/kevinburke/ssh_config v1.1.0 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/lufia/plan9stats v0.0.0-20220517141722-cf486979b281 // indirect
-	github.com/lwch/service v1.99.99 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
