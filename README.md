@@ -25,7 +25,7 @@ go语言最低支持linux内核版本`2.6.23`
 | centos | 5.11 | [2.6.18-398](https://vault.centos.org/5.11/os/Source/) | ❌ |
 | centos | 6.1  | [2.6.32-754](https://vault.centos.org/6.10/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos6.md) |
 | centos | 7.9-2009 | [3.10.0-1160](https://vault.centos.org/7.9.2009/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos7.md) |
-| centos | 8.5.2111 | [4.18.0-348](https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/) | ✅ [示例数据](docs/examples/centos8.md) |
+| centos | 8.5.2111 | [4.18.0-348](https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/) | ✅ [数据示例](docs/examples/centos8.md) |
 | windows | 7 Enterprise with Service Pack 1             | | ✅ |
 | windows | 7 Professional with Service Pack 1, VL Build | | ✅ |
 | windows | 10 Enterprise LTSC 2021                      | | ✅ |
