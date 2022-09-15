@@ -7,8 +7,8 @@
 go语言最低支持linux内核版本`2.6.23`
 
 | 系统   | 版本号 | 内核版本 | 是否支持 |
-| :----: | :---: | :-----: | :-----: |
-| ubuntu | 12.04 | [3.2](https://en.wikipedia.org/wiki/Ubuntu_version_history#Table_of_versions) | ✅ |
+| :----: | :---: | :-----: | ------- |
+| ubuntu | 12.04 | [3.2](https://en.wikipedia.org/wiki/Ubuntu_version_history#Table_of_versions) | ✅ [数据示例](docs/examples/ubuntu12.md) |
 | ubuntu | 14.04 | 3.13 | ✅ |
 | ubuntu | 16.04 | 4.4  | ✅ |
 | ubuntu | 18.04 | 4.15 | ✅ |
@@ -23,9 +23,9 @@ go语言最低支持linux内核版本`2.6.23`
 | redhat | 7.9  | 3.10.0-1160    | ✅ |
 | redhat | 8.6  | 4.18.0-372.9.1 | ✅ |
 | centos | 5.11 | [2.6.18-398](https://vault.centos.org/5.11/os/Source/) | ❌ |
-| centos | 6.1  | [2.6.32-754](https://vault.centos.org/6.10/os/Source/SPackages/) | ✅ |
-| centos | 7.9-2009 | [3.10.0-1160](https://vault.centos.org/7.9.2009/os/Source/SPackages/) | ✅ |
-| centos | 8.5.2111 | [4.18.0-348](https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/) | ✅ |
+| centos | 6.1  | [2.6.32-754](https://vault.centos.org/6.10/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos6.md) |
+| centos | 7.9-2009 | [3.10.0-1160](https://vault.centos.org/7.9.2009/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos7.md) |
+| centos | 8.5.2111 | [4.18.0-348](https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/) | ✅ [示例数据](docs/examples/centos8.md) |
 | windows | 7 Enterprise with Service Pack 1             | | ✅ |
 | windows | 7 Professional with Service Pack 1, VL Build | | ✅ |
 | windows | 10 Enterprise LTSC 2021                      | | ✅ |
