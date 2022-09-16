@@ -10,6 +10,7 @@ import (
 
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
+	"github.com/shirou/gopsutil/v3/cpu"
 )
 
 type tick struct {
@@ -41,6 +42,8 @@ func New(dir, version string) *Agent {
 		version: version,
 		chWrite: make(chan *anet.Msg),
 	}
+	// run first to get last data
+	cpu.Percent(-1, false)
 	go ag.run()
 	return ag
 }
