@@ -20,6 +20,7 @@ func main() {
 	name := flag.String("name", "smartagent", "project name")
 	version := flag.String("version", "1.0", "version")
 	workdir := flag.String("workdir", "", "work dir")
+	epoch := flag.Int("epoch", 1, "build epoch")
 	flag.Parse()
 
 	if len(*conf) <= 1 {
@@ -49,6 +50,7 @@ func main() {
 	utils.Assert(yaml.NewDecoder(f).Decode(&info))
 
 	info.Version = *version
+	info.Epoch = fmt.Sprintf("%d", *epoch)
 
 	for i, ct := range info.Contents {
 		ct.Source = strings.ReplaceAll(ct.Source, "$WORKDIR", *workdir)

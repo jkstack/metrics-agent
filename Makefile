@@ -33,7 +33,8 @@ linux.amd64: prepare
 	go run contrib/pack/release.go -o $(OUTDIR)/$(VERSION) \
 		-conf contrib/pack/amd64.yaml \
 		-name $(PROJ) -version $(VERSION) \
-		-workdir $(OUTDIR)/$(VERSION)
+		-workdir $(OUTDIR)/$(VERSION) \
+		-epoch $(REVERSION)
 linux.386: prepare
 	GOOS=linux GOARCH=386 CGO_ENABLED=0 go build -ldflags $(LDFLAGS) \
 		-o $(OUTDIR)/$(VERSION)/opt/$(PROJ)/bin/$(PROJ) main.go
@@ -42,7 +43,8 @@ linux.386: prepare
 	go run contrib/pack/release.go -o $(OUTDIR)/$(VERSION) \
 		-conf contrib/pack/i386.yaml \
 		-name $(PROJ) -version $(VERSION) \
-		-workdir $(OUTDIR)/$(VERSION)
+		-workdir $(OUTDIR)/$(VERSION) \
+		-epoch $(REVERSION)
 windows.amd64: prepare
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags $(LDFLAGS) \
 		-o $(OUTDIR)/$(VERSION)/opt/$(PROJ)/bin/$(PROJ).exe
