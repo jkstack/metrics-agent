@@ -33,7 +33,7 @@ func List() ([]User, error) {
 				continue
 			}
 			ret = append(ret, User{
-				Name: u.Name,
+				Name: u.Username,
 				ID:   u.Uid,
 				GID:  u.Gid,
 			})
