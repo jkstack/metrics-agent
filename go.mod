@@ -13,6 +13,7 @@ require (
 	github.com/jkstack/libagent v1.1.3
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.7
+	github.com/yusufpapurcu/wmi v1.2.2
 	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -70,7 +71,6 @@ require (
 	github.com/tklauser/numcpus v0.5.0 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xanzy/ssh-agent v0.3.1 // indirect
-	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	gitlab.com/digitalxero/go-conventional-commit v1.0.7 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect

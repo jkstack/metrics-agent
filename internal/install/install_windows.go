@@ -4,21 +4,20 @@
 package install
 
 import (
-	"fmt"
-	"os"
-	"syscall"
 	"time"
+
+	"github.com/yusufpapurcu/wmi"
 )
 
 func Time() (time.Time, error) {
-	fi, err := os.Stat(`C:\Windows\system.ini`)
+	type Win32_OperatingSystem struct {
+		InstallDate time.Time
+	}
+	var list []Win32_OperatingSystem
+	q := wmi.CreateQuery(&list, "")
+	err := wmi.Query(q, &list)
 	if err != nil {
 		return time.Time{}, err
 	}
-	st, ok := fi.Sys().(*syscall.Win32FileAttributeData)
-	if !ok {
-		return time.Time{}, fmt.Errorf("file sys: %T", fi.Sys())
-	}
-	ns := st.CreationTime.Nanoseconds()
-	return time.Unix(ns/1e9, ns%1e9), nil
+	return list[0].InstallDate, nil
 }
