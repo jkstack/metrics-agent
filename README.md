@@ -26,13 +26,13 @@ go语言最低支持linux内核版本`2.6.23`
 | centos | 6.1  | [2.6.32-754](https://vault.centos.org/6.10/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos6.md) |
 | centos | 7.9-2009 | [3.10.0-1160](https://vault.centos.org/7.9.2009/os/Source/SPackages/) | ✅ [数据示例](docs/examples/centos7.md) |
 | centos | 8.5.2111 | [4.18.0-348](https://vault.centos.org/8.5.2111/BaseOS/Source/SPackages/) | ✅ [数据示例](docs/examples/centos8.md) |
-| windows | 7 Enterprise with Service Pack 1             | | ✅ |
-| windows | 7 Professional with Service Pack 1, VL Build | | ✅ |
+| windows | 7 Enterprise with Service Pack 1             | | ✅ [数据示例](docs/examples/win7enterprise.md) |
+| windows | 7 Professional with Service Pack 1, VL Build | | ✅ [数据示例](docs/examples/win7professional.md) |
 | windows | 10 Enterprise LTSC 2021                      | | ✅ |
 | windows | 2008 R2 Enterprise                           | | ✅ |
 | windows | 2008 R2 Datacenter                           | | ✅ |
 | windows | 2016 VL                                      | | ✅ |
-| windows | 2016(Updated Feb 2018)                       | | ✅ |
-| windows | 2016 Essentials                              | | ✅ |
-| windows | 2019(Updated July 2020)                      | | ✅ |
+| windows | 2016(Updated Feb 2018)                       | | ✅ [数据示例](docs/examples/win2016upd2018.md) |
+| windows | 2016 Essentials                              | | ✅ [数据示例](docs/examples/win2016ess.md) |
+| windows | 2019(Updated July 2020)                      | | ✅ [数据示例](docs/examples/win2019.md) |
 | windows | 2022(updated Aug 2022)                       | | ✅ |
