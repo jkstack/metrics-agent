@@ -51,3 +51,17 @@ go语言最低支持linux内核版本`2.6.23`
 5. 检查当前客户端是否连接成功
 
        curl http://<服务端IP>:<端口号(默认13081)>/api/agents/<客户端ID>
+
+## windows系统部署
+
+1. 根据当前操作系统下载`exe`或`msi`安装包，[下载地址](https://github.com/jkstack/metrics-agent/releases/latest)
+2. 安装该安装包，程序默认会被安装到`C:\Program Files (x86)\metrics-agent`目录下
+3. 按需修改配置文件，配置文件将默认被安装在`C:\Program Files (x86)\metrics-agent\conf\agent.conf`目录下，建议修改以下配置内容
+   - basic.id: 客户端ID，在该集群下不可重复
+   - basic.server: 服务器端地址
+4. 使用以下命令打开系统服务管理面板，找到`metrics-agent`服务并启动
+
+       services.msc
+5. 检查当前客户端是否连接成功
+
+       curl http://<服务端IP>:<端口号(默认13081)>/api/agents/<客户端ID>
