@@ -30,10 +30,10 @@ go语言最低支持linux内核版本`2.6.23`
 | windows | 7 Enterprise with Service Pack 1             | | ✅ [数据示例](docs/examples/win7enterprise.md) |
 | windows | 7 Professional with Service Pack 1, VL Build | | ✅ [数据示例](docs/examples/win7professional.md) |
 | windows | 10 Enterprise LTSC 2021                      | | ✅ [数据示例](docs/examples/win10.md) |
-| windows | 2008 R2 Enterprise                           | | ✅ |
-| windows | 2008 R2 Datacenter                           | | ✅ |
-| windows | 2016 VL                                      | | ✅ |
+| windows | 2008 R2 Enterprise                           | | ✅ [数据示例](docs/examples/win2008ent.md) |
+| windows | 2008 R2 Datacenter                           | | ✅ [数据示例](docs/examples/win2008dc.md) |
+| windows | 2016 VL                                      | | ✅ [数据示例](docs/examples/win2016vl.md) |
 | windows | 2016(Updated Feb 2018)                       | | ✅ [数据示例](docs/examples/win2016upd2018.md) |
 | windows | 2016 Essentials                              | | ✅ [数据示例](docs/examples/win2016ess.md) |
 | windows | 2019(Updated July 2020)                      | | ✅ [数据示例](docs/examples/win2019.md) |
-| windows | 2022(updated Aug 2022)                       | | ✅ |
+| windows | 2022(updated Aug 2022)                       | | ✅ [数据示例](docs/examples/win2022.md) |
