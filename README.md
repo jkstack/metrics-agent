@@ -37,3 +37,17 @@ go语言最低支持linux内核版本`2.6.23`
 | windows | 2016 Essentials                              | | ✅ [数据示例](docs/examples/win2016ess.md) |
 | windows | 2019(Updated July 2020)                      | | ✅ [数据示例](docs/examples/win2019.md) |
 | windows | 2022(updated Aug 2022)                       | | ✅ [数据示例](docs/examples/win2022.md) |
+
+## linux系统部署
+
+1. 根据当前操作系统下载`deb`或`rpm`安装包，[下载地址](https://github.com/jkstack/metrics-agent/releases/latest)
+2. 使用`rpm`或`dpkg`命令安装该软件包，程序将被安装到`/opt/metrics-agent`目录下
+3. 按需修改配置文件，配置文件将被安装在`/opt/metrics-agent/conf/agent.conf`目录下，建议修改以下配置内容
+   - basic.id: 客户端ID，在该集群下不可重复
+   - basic.server: 服务器端地址
+4. 使用以下命令启动客户端程序
+
+       /opt/metrics-agent/bin/metrics-agent -action start
+5. 检查当前客户端是否连接成功
+
+       curl http://<服务端IP>:<端口号(默认13081)>/api/agents/<客户端ID>
