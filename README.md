@@ -38,6 +38,16 @@ go语言最低支持linux内核版本`2.6.23`
 | windows | 2019(Updated July 2020)                      | | ✅ [数据示例](docs/examples/win2019.md) |
 | windows | 2022(updated Aug 2022)                       | | ✅ [数据示例](docs/examples/win2022.md) |
 
+## 如何编译
+
+1. 下载源代码
+
+       https://github.com/jkstack/metrics-agent.git
+
+2. 使用以下命令编译，编译成功后会在当前目录下生成`metrics`或`metrics.exe`文件
+
+       go build
+
 ## linux系统部署
 
 1. 根据当前操作系统下载`deb`或`rpm`安装包，[下载地址](https://github.com/jkstack/metrics-agent/releases/latest)
