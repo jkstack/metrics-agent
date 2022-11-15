@@ -47,3 +47,4 @@
 ## TODO
 
 1. 修正deb和rpm包中的epoch问题
+2. 增加manifest.yaml配置信息描述文件

@@ -1,0 +1,214 @@
+- key: id
+  name:
+    zh: AgentID
+  desc:
+    zh: Agent的ID，在当前服务器下的集群内唯一
+  default: example-agent
+
+- key: server
+  type: naddr
+  name:
+    zh: 服务端地址
+  desc:
+    zh: 连接服务器端的地址
+  default: 127.0.0.1:13081
+
+- key: log.target
+  type: csv
+  name:
+    zh: 日志输出目标
+  desc:
+    zh: 日志输出目标，目前仅支持stdout和file
+  default: stdout
+  csv_valid: [ stdout, file ]
+
+- key: log.dir
+  type: path
+  name:
+    zh: 日志文件路径
+  desc:
+    zh: 日志文件保存路径，仅当log.target中配置了file时有效
+  enabled:
+    when:
+      target: log.target
+      contain: file
+
+- key: log.size
+  type: bytes
+  name:
+    zh: 日志文件大小
+  desc:
+    zh: 日志文件滚动分割时的文件大小，仅当log.target中配置了file时有效
+  default: 10M
+  enabled:
+    when:
+      target: log.target
+      contain: file
+
+- key: log.rotate
+  type: uint
+  name:
+    zh: 日志文件份数
+  desc:
+    zh: 日志文件滚动分割时保留的份数，仅当log.target中配置了file时有效
+  default: 7
+  enabled:
+    when:
+      target: log.target
+      contain: file
+
+- key: monitor.enabled
+  type: bool
+  name:
+    zh: 是否启用监控
+  desc:
+    zh: 是否启用监控，agent会定时上报监控数据
+  default: true
+
+- key: monitor.interval
+  type: duration
+  name:
+    zh: 监控频率
+  desc:
+    zh: 监控数据上报频率
+  default: 10s
+  enabled:
+    when:
+      target: monitor.enabled
+      equal: true
+
+- key: basic.limit.cpu_quota
+  type: uint
+  name:
+    zh: CPU资源限制
+  desc:
+    zh: 100表示单个CPU核心
+  default: 100
+
+- key: basic.limit.memory_limit
+  type: bytes
+  name:
+    zh: 内存资源限制
+  desc:
+    zh: 内存资源限制
+  default: 512M
+
+- key: task.jobs
+  type: csv
+  name:
+    zh: 采集项
+  desc:
+    zh: |-
+目前已支持的模板如下
+static: 静态资源数据，如操作系统、内存大小、磁盘列表等基本不太会变化的数据
+usage: 当前CPU使用率、内存使用率、磁盘使用率等
+process: 当前进程列表
+conns: 当前连接信息
+temps: 传感器温度
+  default: [ static, usage, process, conns, temps ]
+  csv_valid: [ static, usage, process, conns, temps ]
+
+- key: task.static.interval
+  type: duration
+  name:
+    zh: 静态数据采集间隔
+  desc:
+    zh: 静态数据采集间隔
+  default: 24h
+  enabled:
+    when:
+      target: task.jobs
+      contain: static
+
+- key: task.usage.interval
+  type: duration
+  name:
+    zh: 使用率数据采集间隔
+  desc:
+    zh: 使用率数据采集间隔
+  default: 5s
+  enabled:
+    when:
+      target: task.jobs
+      contain: usage
+
+- key: task.process.interval
+  type: duration
+  name:
+    zh: 进程列表数据采集间隔
+  desc:
+    zh: 进程列表数据采集间隔
+  default: 1m
+  enabled:
+    when:
+      target: task.jobs
+      contain: process
+
+- key: task.conns.interval
+  type: duration
+  name:
+    zh: 链接列表数据采集间隔
+  desc:
+    zh: 链接列表数据采集间隔
+  default: 1m
+  enabled:
+    when:
+      target: task.jobs
+      contain: conns
+
+- key: task.temps.interval
+  type: duration
+  name:
+    zh: 温感设备数据采集间隔
+  desc:
+    zh: 温感设备数据采集间隔
+  default: 1m
+  enabled:
+    when:
+      target: task.jobs
+      contain: temps
+
+- key: task.process.qps_limit
+  type: uint
+  name:
+    zh: 进程列表的QPS限制
+  desc:
+    zh: 每秒允许获取多少个进程信息
+  default: 200
+  enabled:
+    when:
+      target: task.jobs
+      contain: process
+
+- key: task.conns.qps_limit
+  type: uint
+  name:
+    zh: 链接列表的QPS限制
+  desc:
+    zh: 每秒允许获取多少个链接信息
+  default: 500
+  enabled:
+    when:
+      target: task.jobs
+      contain: conns
+
+- key: task.conns.allow
+  type: csv
+  name:
+    zh: 链接类型
+  desc:
+    zh: |-
+允许获取的链接类型，支持以下配置
+tcp: 包含tcp4和tcp6
+tcp4: tcp ipv4连接
+tcp6: tcp ipv6连接
+udp: 包含udp和udp6
+udp4: udp ipv4连接
+udp6: udp ipv6连接
+unix: unix domain socket连接
+  default: [ tcp, udp, unix ]
+  csv_valid: [ tcp, tcp4, tcp6, udp, udp4, udp6, unix ]
+  enabled:
+    when:
+      target: task.jobs
+      contain: conns

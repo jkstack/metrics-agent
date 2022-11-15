@@ -21,6 +21,7 @@ LDFLAGS="-X 'main.gitBranch=$(BRANCH)' \
 -X 'main.version=$(VERSION)'"
 
 all: distclean linux.amd64 linux.386 windows.amd64 windows.386 msi.amd64 msi.386
+	cp conf/manifest.yaml $(OUTDIR)/$(VERSION)/manifest.yaml
 	cp CHANGELOG.md $(OUTDIR)/CHANGELOG.md
 	rm -fr $(OUTDIR)/$(VERSION)/etc $(OUTDIR)/$(VERSION)/opt
 version:
