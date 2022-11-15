@@ -99,12 +99,12 @@
     zh: 采集项
   desc:
     zh: |-
-目前已支持的模板如下
-static: 静态资源数据，如操作系统、内存大小、磁盘列表等基本不太会变化的数据
-usage: 当前CPU使用率、内存使用率、磁盘使用率等
-process: 当前进程列表
-conns: 当前连接信息
-temps: 传感器温度
+      目前已支持的模板如下
+      static: 静态资源数据，如操作系统、内存大小、磁盘列表等基本不太会变化的数据
+      usage: 当前CPU使用率、内存使用率、磁盘使用率等
+      process: 当前进程列表
+      conns: 当前连接信息
+      temps: 传感器温度
   default: [ static, usage, process, conns, temps ]
   csv_valid: [ static, usage, process, conns, temps ]
 
@@ -198,14 +198,14 @@ temps: 传感器温度
     zh: 链接类型
   desc:
     zh: |-
-允许获取的链接类型，支持以下配置
-tcp: 包含tcp4和tcp6
-tcp4: tcp ipv4连接
-tcp6: tcp ipv6连接
-udp: 包含udp和udp6
-udp4: udp ipv4连接
-udp6: udp ipv6连接
-unix: unix domain socket连接
+      允许获取的链接类型，支持以下配置
+      tcp: 包含tcp4和tcp6
+      tcp4: tcp ipv4连接
+      tcp6: tcp ipv6连接
+      udp: 包含udp和udp6
+      udp4: udp ipv4连接
+      udp6: udp ipv6连接
+      unix: unix domain socket连接
   default: [ tcp, udp, unix ]
   csv_valid: [ tcp, tcp4, tcp6, udp, udp4, udp6, unix ]
   enabled:
