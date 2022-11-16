@@ -10,9 +10,11 @@ require (
 	github.com/jaypipes/ghw v0.9.0
 	github.com/jkstack/anet v0.0.0-20221010100306-9a88844af68f
 	github.com/jkstack/jkframe v1.1.0
-	github.com/jkstack/libagent v1.1.4
+	github.com/jkstack/libagent v1.1.7
+	github.com/kardianos/service v1.2.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.10
+	github.com/spf13/cobra v1.6.0
 	github.com/yusufpapurcu/wmi v1.2.2
 	golang.org/x/time v0.1.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -52,9 +54,9 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/jaypipes/pcidb v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
-	github.com/kardianos/service v1.2.1 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/klauspost/compress v1.15.12 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
@@ -67,6 +69,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20220216144756-c35f1ee13d7c // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/tklauser/numcpus v0.5.0 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect

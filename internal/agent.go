@@ -13,6 +13,8 @@ import (
 	"github.com/shirou/gopsutil/v3/cpu"
 )
 
+var AgentName string
+
 type tick struct {
 	bytes uint64
 	count uint64
