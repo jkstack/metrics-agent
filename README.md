@@ -57,7 +57,7 @@ go语言最低支持linux内核版本`2.6.23`
    - basic.server: 服务器端地址
 4. 使用以下命令启动客户端程序
 
-       /opt/metrics-agent/bin/metrics-agent -action start
+       /opt/metrics-agent/bin/metrics-agent start
 5. 检查当前客户端是否连接成功
 
        curl http://<服务端IP>:<端口号(默认13081)>/api/agents/<客户端ID>
