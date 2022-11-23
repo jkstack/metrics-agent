@@ -41,6 +41,7 @@
   desc:
     zh: 日志文件滚动分割时的文件大小，仅当log.target中配置了file时有效
   default: 10M
+  min: 1K
   enabled:
     when:
       target: basic.log.target
@@ -53,6 +54,7 @@
   desc:
     zh: 日志文件滚动分割时保留的份数，仅当log.target中配置了file时有效
   default: 7
+  min: 1
   enabled:
     when:
       target: basic.log.target
@@ -73,6 +75,7 @@
   desc:
     zh: 监控数据上报频率
   default: 10s
+  min: 1s
   enabled:
     when:
       target: basic.monitor.enabled
@@ -85,6 +88,7 @@
   desc:
     zh: 100表示单个CPU核心
   default: 100
+  min: 10
 
 - key: basic.limit.memory_limit
   type: bytes
@@ -93,6 +97,7 @@
   desc:
     zh: 内存资源限制
   default: 512M
+  min: 32M
 
 - key: task.jobs
   type: csv
@@ -116,6 +121,7 @@
   desc:
     zh: 静态数据采集间隔
   default: 24h
+  min: 1s
   enabled:
     when:
       target: task.jobs
@@ -128,6 +134,7 @@
   desc:
     zh: 使用率数据采集间隔
   default: 5s
+  min: 1s
   enabled:
     when:
       target: task.jobs
@@ -140,6 +147,7 @@
   desc:
     zh: 进程列表数据采集间隔
   default: 1m
+  min: 1s
   enabled:
     when:
       target: task.jobs
@@ -152,6 +160,7 @@
   desc:
     zh: 链接列表数据采集间隔
   default: 1m
+  min: 1s
   enabled:
     when:
       target: task.jobs
@@ -164,6 +173,7 @@
   desc:
     zh: 温感设备数据采集间隔
   default: 1m
+  min: 1s
   enabled:
     when:
       target: task.jobs
