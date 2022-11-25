@@ -95,7 +95,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  SimpleSC::InstallService "metrics-agent" "metrics-agent" "16" "2" "$INSTDIR\bin\metrics-agent.exe -conf $\"$INSTDIR\conf\agent.conf$\""
+  SimpleSC::InstallService "metrics-agent" "metrics-agent" "16" "2" "$INSTDIR\bin\metrics-agent.exe --conf $\"$INSTDIR\conf\agent.conf$\""
   SimpleSC::SetServiceDescription "metrics-agent" "jkstack metrics agent"
 SectionEnd
 
