@@ -28,7 +28,7 @@
                     Start="auto"
                     Account="LocalSystem"
                     ErrorControl="normal"
-                    Arguments='-conf "[INSTALLDIR]conf\agent.conf"' />
+                    Arguments='--conf "[INSTALLDIR]conf\agent.conf"' />
                   <ServiceControl
                     Id="ServiceInstaller"
                     Name="metrics-agent"
