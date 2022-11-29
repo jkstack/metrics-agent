@@ -3,7 +3,7 @@
 OUTDIR=$(shell realpath release)
 
 PROJ=metrics-agent
-VERSION=1.0.13
+VERSION=1.0.14
 TIMESTAMP=`date +%s`
 
 MAJOR=`echo $(VERSION)|cut -d'.' -f1`
