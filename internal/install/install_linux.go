@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// Time get system install time
 func Time() (time.Time, error) {
 	files, err := filepath.Glob("/etc/*")
 	if err != nil {

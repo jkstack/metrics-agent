@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Time get system install time
 func Time() (time.Time, error) {
 	return time.Time{}, errors.ErrUnsupported
 }

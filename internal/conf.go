@@ -51,14 +51,17 @@ func load(dir string) *lconf.Configure {
 	return &ret
 }
 
+// ConfDir get configure dir
 func (agent *Agent) ConfDir() string {
 	return agent.cfgDir
 }
 
+// Configure get basic configure
 func (agent *Agent) Configure() *conf.Configure {
 	return &agent.cfg.Basic
 }
 
+// OnRewriteConfigure rewrite configure file
 func (agent *Agent) OnRewriteConfigure() error {
 	f, err := os.Create(agent.cfgDir + ".tmp")
 	if err != nil {

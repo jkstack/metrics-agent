@@ -11,6 +11,7 @@ import (
 	"github.com/shirou/gopsutil/v3/net"
 )
 
+// Type get connection type
 func Type(warnings *uint64, conn net.ConnectionStat) string {
 	switch conn.Type {
 	case syscall.SOCK_STREAM:

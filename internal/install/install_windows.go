@@ -9,6 +9,7 @@ import (
 	"github.com/yusufpapurcu/wmi"
 )
 
+// Time get system install time
 func Time() (time.Time, error) {
 	type Win32_OperatingSystem struct {
 		InstallDate time.Time

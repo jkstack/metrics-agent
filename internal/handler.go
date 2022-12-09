@@ -10,6 +10,7 @@ import (
 	"github.com/jkstack/jkframe/logging"
 )
 
+// OnConnect on connect callback
 func (agent *Agent) OnConnect() {
 	if agent.chWrite != nil {
 		close(agent.chWrite)
@@ -18,6 +19,7 @@ func (agent *Agent) OnConnect() {
 	agent.chWrite = make(chan *anet.Msg, 10000)
 }
 
+// OnDisconnect on disconnect callback
 func (agent *Agent) OnDisconnect() {
 	if agent.chWrite != nil {
 		close(agent.chWrite)
@@ -25,6 +27,7 @@ func (agent *Agent) OnDisconnect() {
 	agent.chWrite = nil
 }
 
+// OnReportMonitor on report monitor callback
 func (agent *Agent) OnReportMonitor() {
 	defer utils.Recover("report agent status")
 	var msg anet.Msg
@@ -68,6 +71,7 @@ func (agent *Agent) OnReportMonitor() {
 	agent.chWrite <- &msg
 }
 
+// OnMessage on receive message callback
 func (agent *Agent) OnMessage(msg *anet.Msg) error {
 	defer utils.Recover("OnMessage")
 	switch msg.Type {
@@ -150,6 +154,7 @@ func (agent *Agent) OnMessage(msg *anet.Msg) error {
 	return nil
 }
 
+// LoopWrite loop write
 func (agent *Agent) LoopWrite(ctx context.Context, ch chan *anet.Msg) error {
 	for {
 		if agent.chWrite == nil {

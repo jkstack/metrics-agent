@@ -14,14 +14,14 @@ import (
 
 func getUsage(warnings *uint64) *anet.HMDynamicUsage {
 	var ret anet.HMDynamicUsage
-	getCpuUsage(warnings, &ret)
+	getCPUUsage(warnings, &ret)
 	getMemoryUsage(warnings, &ret)
 	getPartitionUsage(warnings, &ret)
 	getInterfaceUsage(warnings, &ret)
 	return &ret
 }
 
-func getCpuUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
+func getCPUUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
 	usage, err := cpu.Percent(-1, false)
 	if err != nil {
 		logging.Warning("get cpu percent: %v", err)

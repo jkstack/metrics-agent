@@ -13,6 +13,7 @@ import (
 	"github.com/shirou/gopsutil/v3/cpu"
 )
 
+// AgentName agent name
 var AgentName string
 
 type tick struct {
@@ -20,6 +21,7 @@ type tick struct {
 	count uint64
 }
 
+// Agent agent object
 type Agent struct {
 	cfgDir  string
 	cfg     *conf.Configure
@@ -37,6 +39,7 @@ type Agent struct {
 	tkTemps   tick
 }
 
+// New create agent object
 func New(dir, version string) *Agent {
 	ag := &Agent{
 		cfgDir:  dir,
@@ -50,10 +53,12 @@ func New(dir, version string) *Agent {
 	return ag
 }
 
+// AgentName get agent name
 func (agent *Agent) AgentName() string {
 	return "metrics-agent"
 }
 
+// Version get agent version
 func (agent *Agent) Version() string {
 	return agent.version
 }
