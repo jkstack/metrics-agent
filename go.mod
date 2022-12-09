@@ -10,7 +10,7 @@ require (
 	github.com/jaypipes/ghw v0.9.0
 	github.com/jkstack/anet v0.0.0-20221010100306-9a88844af68f
 	github.com/jkstack/jkframe v1.1.0
-	github.com/jkstack/libagent v1.1.7
+	github.com/jkstack/libagent v1.1.8
 	github.com/kardianos/service v1.2.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.10
