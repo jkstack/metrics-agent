@@ -26,7 +26,7 @@ func getStatic(warnings *uint64) *anet.HMStaticPayload {
 	var ret anet.HMStaticPayload
 	ret.Time = time.Now()
 	fillStaticHostInfo(warnings, &ret)
-	fillStaticCpuInfo(warnings, &ret)
+	fillStaticCPUInfo(warnings, &ret)
 	fillStaticMemoryInfo(warnings, &ret)
 	fillStaticDiskInfo(warnings, &ret)
 	fillStaticNetworkInfo(warnings, &ret)
@@ -59,7 +59,7 @@ func fillStaticHostInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 	ret.Kernel.Arch = info.KernelArch
 }
 
-func fillStaticCpuInfo(warnings *uint64, ret *anet.HMStaticPayload) {
+func fillStaticCPUInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 	var err error
 	ret.CPU.Physical, err = cpu.Counts(false)
 	if err != nil {

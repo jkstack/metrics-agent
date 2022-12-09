@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// List get system user list
 func List() ([]User, error) {
 	f, err := os.Open("/etc/passwd")
 	if err != nil {

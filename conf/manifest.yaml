@@ -4,6 +4,7 @@
     zh: AgentID
   desc:
     zh: Agent的ID，在当前服务器下的集群内唯一
+  required: true
   default: example-agent
 
 - key: basic.server
@@ -12,6 +13,7 @@
     zh: 服务端地址
   desc:
     zh: 连接服务器端的地址
+  required: true
   default: 127.0.0.1:13081
 
 - key: basic.log.target
@@ -20,6 +22,7 @@
     zh: 日志输出目标
   desc:
     zh: 日志输出目标，目前仅支持stdout和file
+  required: true
   default: [ stdout, file ]
   csv_valid: [ stdout, file ]
 
@@ -29,6 +32,7 @@
     zh: 日志文件路径
   desc:
     zh: 日志文件保存路径，仅当log.target中配置了file时有效
+  required: true
   enabled:
     when:
       target: basic.log.target
@@ -40,6 +44,7 @@
     zh: 日志文件大小
   desc:
     zh: 日志文件滚动分割时的文件大小，仅当log.target中配置了file时有效
+  required: true
   default: 10M
   min: 1K
   enabled:
@@ -53,6 +58,7 @@
     zh: 日志文件份数
   desc:
     zh: 日志文件滚动分割时保留的份数，仅当log.target中配置了file时有效
+  required: true
   default: 7
   min: 1
   enabled:
@@ -66,6 +72,7 @@
     zh: 是否启用监控
   desc:
     zh: 是否启用监控，agent会定时上报监控数据
+  required: true
   default: true
 
 - key: basic.monitor.interval
@@ -74,6 +81,7 @@
     zh: 监控频率
   desc:
     zh: 监控数据上报频率
+  required: true
   default: 10s
   min: 1s
   enabled:
@@ -87,6 +95,7 @@
     zh: CPU资源限制
   desc:
     zh: 100表示单个CPU核心
+  required: true
   default: 100
   min: 10
 
@@ -96,6 +105,7 @@
     zh: 内存资源限制
   desc:
     zh: 内存资源限制
+  required: true
   default: 512M
   min: 32M
 
@@ -111,6 +121,7 @@
       process: 当前进程列表
       conns: 当前连接信息
       temps: 传感器温度
+  required: true
   default: [ static, usage, process, conns, temps ]
   csv_valid: [ static, usage, process, conns, temps ]
 
@@ -120,6 +131,7 @@
     zh: 静态数据采集间隔
   desc:
     zh: 静态数据采集间隔
+  required: true
   default: 24h
   min: 1s
   enabled:
@@ -133,6 +145,7 @@
     zh: 使用率数据采集间隔
   desc:
     zh: 使用率数据采集间隔
+  required: true
   default: 5s
   min: 1s
   enabled:
@@ -146,6 +159,7 @@
     zh: 进程列表数据采集间隔
   desc:
     zh: 进程列表数据采集间隔
+  required: true
   default: 1m
   min: 1s
   enabled:
@@ -159,6 +173,7 @@
     zh: 链接列表数据采集间隔
   desc:
     zh: 链接列表数据采集间隔
+  required: true
   default: 1m
   min: 1s
   enabled:
@@ -172,6 +187,7 @@
     zh: 温感设备数据采集间隔
   desc:
     zh: 温感设备数据采集间隔
+  required: true
   default: 1m
   min: 1s
   enabled:
@@ -185,6 +201,7 @@
     zh: 进程列表的QPS限制
   desc:
     zh: 每秒允许获取多少个进程信息
+  required: true
   default: 200
   enabled:
     when:
@@ -197,6 +214,7 @@
     zh: 链接列表的QPS限制
   desc:
     zh: 每秒允许获取多少个链接信息
+  required: true
   default: 500
   enabled:
     when:
@@ -217,6 +235,7 @@
       udp4: udp ipv4连接
       udp6: udp ipv6连接
       unix: unix domain socket连接
+  required: true
   default: [ tcp, udp, unix ]
   csv_valid: [ tcp, tcp4, tcp6, udp, udp4, udp6, unix ]
   enabled:
