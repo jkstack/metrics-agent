@@ -1,5 +1,11 @@
 # metrics-agent
 
+[![metrics-agent](https://github.com/jkstack/metrics-agent/actions/workflows/build.yml/badge.svg)](https://github.com/jkstack/metrics-agent/actions/workflows/build.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jkstack/metrics-agent)](https://goreportcard.com/report/github.com/jkstack/metrics-agent)
+[![go-mod](https://img.shields.io/github/go-mod/go-version/jkstack/metrics-agent)](https://github.com/jkstack/metrics-agent)
+[![license](https://img.shields.io/github/license/jkstack/metrics-agent)](https://www.gnu.org/licenses/agpl-3.0.txt)
+![downloads](https://img.shields.io/github/downloads/jkstack/metrics-agent/total)
+
 系统状态监控agent
 
 ## 兼容性
