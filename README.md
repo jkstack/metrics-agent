@@ -1,6 +1,6 @@
 # metrics-agent
 
-[![metrics-agent](https://github.com/jkstack/metrics-agent/actions/workflows/build.yml/badge.svg)](https://github.com/jkstack/metrics-agent/actions/workflows/build.yml)
+![version](https://img.shields.io/github/v/release/jkstack/metrics-agent)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jkstack/metrics-agent)](https://goreportcard.com/report/github.com/jkstack/metrics-agent)
 [![go-mod](https://img.shields.io/github/go-mod/go-version/jkstack/metrics-agent)](https://github.com/jkstack/metrics-agent)
 [![license](https://img.shields.io/github/license/jkstack/metrics-agent)](https://www.gnu.org/licenses/agpl-3.0.txt)
