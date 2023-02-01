@@ -1,0 +1,17 @@
+name: metrics-agent
+arch: arm
+platform: linux
+#version: 1.0.0
+maintainer: liwenchao <liwenchao@jkstack.com>
+description: jkstack metrics agent
+contents:
+  - src: $WORKDIR/opt/metrics-agent/bin/metrics-agent
+    dst: /opt/metrics-agent/bin/metrics-agent
+  - src: $WORKDIR/opt/metrics-agent/conf/agent.conf
+    dst: /opt/metrics-agent/conf/agent.conf
+    type: config|noreplace
+  - src: $WORKDIR/opt/metrics-agent/.version
+    dst: /opt/metrics-agent/.version
+scripts:
+  postinstall: contrib/pack/postinstall
+  preremove: contrib/pack/preremove
