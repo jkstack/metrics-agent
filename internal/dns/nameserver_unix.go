@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// NameServer returns the nameserver list from /etc/resolv.conf
 func NameServer() ([]string, error) {
 	f, err := os.Open("/etc/resolv.conf")
 	if err != nil {

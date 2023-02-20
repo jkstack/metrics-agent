@@ -10,6 +10,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+// NameServer returns the nameserver list from addapter list.
 func NameServer() ([]string, error) {
 	var b []byte
 	l := uint32(15000)
