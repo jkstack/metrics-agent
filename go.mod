@@ -8,7 +8,7 @@ require (
 	github.com/goreleaser/nfpm/v2 v2.25.1
 	github.com/jackpal/gateway v1.0.7
 	github.com/jaypipes/ghw v0.10.0
-	github.com/jkstack/anet v0.0.0-20230207071751-5a225913e4b2
+	github.com/jkstack/anet v0.0.0-20230220030505-4da4a8898921
 	github.com/jkstack/jkframe v1.3.0
 	github.com/jkstack/libagent v1.2.0
 	github.com/kardianos/service v1.2.1
@@ -16,6 +16,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/spf13/cobra v1.6.1
 	github.com/yusufpapurcu/wmi v1.2.2
+	golang.org/x/sys v0.5.0
 	golang.org/x/time v0.3.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -79,7 +80,6 @@ require (
 	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/tools v0.5.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
