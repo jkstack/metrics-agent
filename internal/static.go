@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"metrics/internal/dns"
 	"metrics/internal/errors"
 	"metrics/internal/install"
 	"metrics/internal/user"
@@ -167,6 +168,12 @@ func fillStaticNetworkInfo(warnings *uint64, ret *anet.HMStaticPayload) {
 		atomic.AddUint64(warnings, 1)
 	}
 	ret.GateWay = gw.String()
+	nss, err := dns.NameServer()
+	if err != nil {
+		logging.Warning("get nameserver: %v", err)
+		atomic.AddUint64(warnings, 1)
+	}
+	ret.NameServers = nss
 	intfs, err := net.Interfaces()
 	if err != nil {
 		logging.Warning("get interfaces: %v", err)
