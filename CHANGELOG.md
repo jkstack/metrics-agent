@@ -99,3 +99,9 @@ windows下的exe安装包支持静默卸载
 
 1. 新增nameserver相关字段
 2. go版本升级到1.20.1
+
+## 1.2.2
+
+1. 新增CPU的load1、load5、load15负载信息字段 [#31](https://github.com/jkstack/metrics-agent/issues/31)
+2. 新增磁盘的read_per_second、write_per_second、iops_in_progress速率信息字段 [#30](https://github.com/jkstack/metrics-agent/issues/30)
+3. 调整打包脚本，新增oss上传逻辑
