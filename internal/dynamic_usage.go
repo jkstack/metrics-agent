@@ -8,6 +8,7 @@ import (
 	"github.com/jkstack/jkframe/utils"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
+	load2 "github.com/shirou/gopsutil/v3/load"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/net"
 )
@@ -30,6 +31,14 @@ func getCPUUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
 	if len(usage) > 0 {
 		ret.Cpu.Usage = utils.Float64P2(usage[0])
 	}
+	avg, err := load2.Avg()
+	if err != nil {
+		logging.Warning("get cpu load average: %v", err)
+		atomic.AddUint64(warnings, 1)
+	}
+	ret.Cpu.Load1 = utils.Float64P2(avg.Load1)
+	ret.Cpu.Load5 = utils.Float64P2(avg.Load5)
+	ret.Cpu.Load15 = utils.Float64P2(avg.Load15)
 }
 
 func getMemoryUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
