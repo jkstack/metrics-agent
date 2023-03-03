@@ -1,7 +1,10 @@
 package internal
 
 import (
+	"path/filepath"
+	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/jkstack/anet"
 	"github.com/jkstack/jkframe/logging"
@@ -57,12 +60,74 @@ func getMemoryUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
 	}
 }
 
+type ioCounter struct {
+	t              time.Time
+	readBytes      uint64
+	writeBytes     uint64
+	readPerSecond  float64
+	writePerSecond float64
+	iopsInProgress uint64
+}
+
+var mIOCounters sync.RWMutex
+var ioCounters map[string]ioCounter
+var ioCounterRoutineOnce sync.Once
+
+func updateIoCounters(warnings *uint64) {
+	fn := func() {
+		parts, err := disk.Partitions(false)
+		if err != nil {
+			atomic.AddUint64(warnings, 1)
+			return
+		}
+		names := make([]string, 0, len(parts))
+		for _, part := range parts {
+			names = append(names, part.Device)
+		}
+		stats, err := disk.IOCounters(names...)
+		if err != nil {
+			atomic.AddUint64(warnings, 1)
+			return
+		}
+		counters := make(map[string]ioCounter)
+		for device, stat := range stats {
+			mIOCounters.RLock()
+			old := ioCounters[device]
+			mIOCounters.RUnlock()
+			if old.t.IsZero() {
+				old.t = time.Now().Add(-time.Second)
+			}
+			counter := ioCounter{
+				t:              time.Now(),
+				readBytes:      stat.ReadBytes,
+				writeBytes:     stat.WriteBytes,
+				readPerSecond:  float64(stat.ReadBytes-old.readBytes) / time.Since(old.t).Seconds(),
+				writePerSecond: float64(stat.WriteBytes-old.writeBytes) / time.Since(old.t).Seconds(),
+				iopsInProgress: stat.IopsInProgress,
+			}
+			counters[device] = counter
+		}
+		mIOCounters.Lock()
+		ioCounters = counters
+		mIOCounters.Unlock()
+	}
+
+	tk := time.NewTicker(5 * time.Second)
+	for {
+		<-tk.C
+		fn()
+	}
+}
+
 func getPartitionUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
 	parts, err := disk.Partitions(false)
 	if err != nil {
 		logging.Warning("get partitions: %v", err)
 		atomic.AddUint64(warnings, 1)
 	}
+	ioCounterRoutineOnce.Do(func() {
+		go updateIoCounters(warnings)
+	})
 	for _, part := range parts {
 		usage, err := disk.Usage(part.Mountpoint)
 		if err != nil {
@@ -70,14 +135,20 @@ func getPartitionUsage(warnings *uint64, ret *anet.HMDynamicUsage) {
 			atomic.AddUint64(warnings, 1)
 			continue
 		}
+		mIOCounters.RLock()
+		counter := ioCounters[filepath.Base(part.Device)]
+		mIOCounters.RUnlock()
 		ret.Partitions = append(ret.Partitions, anet.HMDynamicPartition{
-			Name:       part.Mountpoint,
-			Used:       usage.Used,
-			Free:       usage.Free,
-			Usage:      utils.Float64P2(usage.UsedPercent),
-			InodeUsed:  usage.InodesUsed,
-			InodeFree:  usage.InodesFree,
-			InodeUsage: utils.Float64P2(usage.InodesUsedPercent),
+			Name:           part.Mountpoint,
+			Used:           usage.Used,
+			Free:           usage.Free,
+			Usage:          utils.Float64P2(usage.UsedPercent),
+			InodeUsed:      usage.InodesUsed,
+			InodeFree:      usage.InodesFree,
+			InodeUsage:     utils.Float64P2(usage.InodesUsedPercent),
+			ReadPreSecond:  utils.Float64P2(counter.readPerSecond),
+			WritePreSecond: utils.Float64P2(counter.writePerSecond),
+			IopsInProgress: counter.iopsInProgress,
 		})
 	}
 }
