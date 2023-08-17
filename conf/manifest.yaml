@@ -83,7 +83,7 @@
     zh: 监控数据上报频率
   required: true
   default: 10s
-  min: 1s
+  min: 5s
   enabled:
     when:
       target: basic.monitor.enabled
@@ -203,6 +203,7 @@
     zh: 每秒允许获取多少个进程信息
   required: true
   default: 200
+  min: 100
   enabled:
     when:
       target: task.jobs
@@ -216,6 +217,7 @@
     zh: 每秒允许获取多少个链接信息
   required: true
   default: 500
+  min: 100
   enabled:
     when:
       target: task.jobs
