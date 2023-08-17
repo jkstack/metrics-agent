@@ -63,6 +63,10 @@ func (agent *Agent) Version() string {
 	return agent.version
 }
 
+// OnStop stop signal
+func (agent *Agent) OnStop() {
+}
+
 func (agent *Agent) run() {
 	if agent.cancel != nil {
 		agent.cancel()
